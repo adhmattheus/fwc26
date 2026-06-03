@@ -17,6 +17,7 @@ export class GroupController {
       const groups = await this.getAllGroupsUseCase.execute();
       sendJson(res, 200, groups);
     } catch (error) {
+      console.error("GroupController error:", error);
       if (error instanceof AppError) {
         sendError(res, error.statusCode, error.message);
       } else {

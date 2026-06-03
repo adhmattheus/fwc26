@@ -24,10 +24,10 @@ export class GroupRepository implements IGroupRepository {
     });
 
     return Promise.all(
-      groups.map(async (group) => ({
+      groups.map(async (group: (typeof groups)[number]) => ({
         ...group,
         teams: await Promise.all(
-          group.teams.map(async (team) => ({
+          group.teams.map(async (team: (typeof group.teams)[number]) => ({
             ...team,
             comparison: await playerRepository.countByTeamId(team.id),
           })),

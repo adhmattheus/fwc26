@@ -80,6 +80,7 @@ export async function router(req: IncomingMessage, res: ServerResponse) {
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Route not found" }));
   } catch (error) {
+    console.error("Router error:", error);
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Internal server error" }));
   }
