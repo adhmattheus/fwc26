@@ -12,7 +12,8 @@ export const SIZES = {
 } as const;
 
 export const ASSETS = {
-  FIFA_BADGE_URL: "https://dvcammctw5or7.cloudfront.net/team-badges/fifa.png",
+  STICKERLAB_URL:
+    "https://dvcammctw5or7.cloudfront.net/team-badges/stickerlab.png",
 } as const;
 
 export const ACCURACY_THRESHOLDS = {

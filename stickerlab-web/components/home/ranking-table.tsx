@@ -30,10 +30,10 @@ export function RankingTable({ ranking }: RankingTableProps) {
   return (
     <section className="mb-12 bg-card rounded-xl shadow-lg p-6 border">
       <h2 className="text-xl font-bold text-foreground mb-4">
-        📊 Panini Accuracy Ranking
+        📊 StickerLab Accuracy Ranking
       </h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Percentage of album players that were called up to the World Cup
+        Percentage of album players that were called up
       </p>
       <div className="overflow-x-auto">
         <table className="w-full">

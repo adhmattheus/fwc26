@@ -83,7 +83,7 @@ export default async function TeamPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <StatisticCard
               value={statistics.paniniAccuracyRate}
-              label="Panini Accuracy"
+              label="StickerLab Accuracy"
               description={`${comparison.inAlbumAndCalledUp.total}/${comparison.inAlbumAndCalledUp.total + comparison.onlyInAlbum.total} album players called up`}
               showBadge
             />

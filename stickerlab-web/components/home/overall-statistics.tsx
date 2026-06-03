@@ -25,7 +25,7 @@ export function OverallStatistics({ stats }: OverallStatisticsProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <StatisticCard
           value={stats.paniniAccuracyRate}
-          label="Panini Accuracy"
+          label="StickerLab Accuracy"
           description={`${stats.totalInAlbumAndCalledUp}/${stats.totalAlbumPlayers} album players called up`}
           showBadge
         />

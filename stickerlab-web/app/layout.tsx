@@ -11,9 +11,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Album FWC 2026",
-  description:
-    "Analise your Panini sticker collection for the FIFA World Cup 2026!",
+  title: "StickerLab",
+  description: "Analyze your sticker collection with StickerLab!",
   generator: "v0.app",
   icons: {
     icon: [

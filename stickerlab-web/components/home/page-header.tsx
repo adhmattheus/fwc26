@@ -13,8 +13,8 @@ export function PageHeader() {
           }}
         >
           <Image
-            src={ASSETS.FIFA_BADGE_URL}
-            alt="FIFA World Cup 2026"
+            src={ASSETS.STICKERLAB_URL}
+            alt="StickerLab"
             fill
             className="object-contain"
             priority
@@ -23,10 +23,10 @@ export function PageHeader() {
         </div>
       </div>
       <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-        Album FWC 2026
+        StickerLab
       </h1>
       <p className="text-muted-foreground">
-        Analyze your Panini sticker collection for the FIFA World Cup 2026!
+        Analyze your sticker collection with StickerLab!
       </p>
     </header>
   );
