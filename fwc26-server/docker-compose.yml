@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fwc26-db
+    environment:
+      POSTGRES_USER: fwc26
+      POSTGRES_PASSWORD: fwc26pass
+      POSTGRES_DB: fwc26db
+    ports:
+      - "5432:5432"
+    volumes:
+      - fwc26_pgdata:/var/lib/postgresql/data
+
+volumes:
+  fwc26_pgdata:

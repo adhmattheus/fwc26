@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Group {
+  id           String   @id @default(uuid())
+  name         String   @unique
+  displayOrder Int      @map("display_order")
+  teams        Team[]
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("groups")
+}
+
+model Team {
+  id             String   @id @default(uuid())
+  name           String   @unique
+  slug           String   @unique
+  fifaCode       String   @unique @map("fifa_code")
+  badgeUrl       String?  @map("badge_url")
+  colorPrimary   String   @map("color_primary")
+  colorSecondary String   @map("color_secondary")
+  groupId        String   @map("group_id")
+  group          Group    @relation(fields: [groupId], references: [id])
+  players        Player[]
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("teams")
+}
+
+model Player {
+  id            String   @id @default(uuid())
+  name          String
+  canonicalName String   @map("canonical_name")
+  albumCode     String?  @map("album_code")
+  inAlbum       Boolean  @default(false) @map("in_album")
+  calledUp      Boolean  @default(false) @map("called_up")
+  teamId        String   @map("team_id")
+  team          Team     @relation(fields: [teamId], references: [id])
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("players")
+}
