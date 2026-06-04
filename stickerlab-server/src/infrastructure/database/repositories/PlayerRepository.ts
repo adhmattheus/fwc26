@@ -6,6 +6,7 @@ export class PlayerRepository implements IPlayerRepository {
   async findByTeamId(teamId: string): Promise<Player[]> {
     return prisma.player.findMany({
       where: { teamId },
+      orderBy: [{ inAlbum: "desc" }, { albumCode: "asc" }],
     });
   }
 

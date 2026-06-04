@@ -26,7 +26,7 @@ export async function router(req: IncomingMessage, res: ServerResponse) {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>FWC26 API Docs</title>
+            <title>StickerLab API Docs</title>
             <meta charset="utf-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" type="text/css" href="/api/docs/swagger-ui.css" >

@@ -14,10 +14,24 @@ export class GetTeamByIdUseCase {
 
     const players = await this.playerRepository.findByTeamId(team.id);
 
-    const album = players.filter((p) => p.inAlbum);
+    const sortByAlbumCode = <T extends { albumCode: string | null }>(
+      arr: T[],
+    ): T[] =>
+      [...arr].sort((a, b) => {
+        if (!a.albumCode || !b.albumCode) return 0;
+        const numA = parseInt(a.albumCode.split("-")[1]);
+        const numB = parseInt(b.albumCode.split("-")[1]);
+        return numA - numB;
+      });
+
+    const album = sortByAlbumCode(players.filter((p) => p.inAlbum));
     const calledUp = players.filter((p) => p.calledUp);
-    const inAlbumAndCalledUp = players.filter((p) => p.inAlbum && p.calledUp);
-    const onlyInAlbum = players.filter((p) => p.inAlbum && !p.calledUp);
+    const inAlbumAndCalledUp = sortByAlbumCode(
+      players.filter((p) => p.inAlbum && p.calledUp),
+    );
+    const onlyInAlbum = sortByAlbumCode(
+      players.filter((p) => p.inAlbum && !p.calledUp),
+    );
     const calledUpWithoutSticker = players.filter(
       (p) => p.calledUp && !p.inAlbum,
     );

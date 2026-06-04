@@ -8,8 +8,8 @@ export function PageHeader() {
         <div
           className="relative"
           style={{
-            width: SIZES.BADGE.EXTRA_LARGE.width * 4,
-            height: SIZES.BADGE.EXTRA_LARGE.height * 4,
+            width: SIZES.BADGE.EXTRA_LARGE.width * 8,
+            height: SIZES.BADGE.EXTRA_LARGE.height * 8,
           }}
         >
           <Image
@@ -22,9 +22,7 @@ export function PageHeader() {
           />
         </div>
       </div>
-      <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-        StickerLab
-      </h1>
+
       <p className="text-muted-foreground">
         Analyze your sticker collection with StickerLab!
       </p>

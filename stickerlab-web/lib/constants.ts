@@ -13,7 +13,7 @@ export const SIZES = {
 
 export const ASSETS = {
   STICKERLAB_URL:
-    "https://dvcammctw5or7.cloudfront.net/team-badges/stickerlab.png",
+    "https://dvcammctw5or7.cloudfront.net/team-badges/stickerlab-new.png",
 } as const;
 
 export const ACCURACY_THRESHOLDS = {

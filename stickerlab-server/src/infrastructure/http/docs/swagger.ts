@@ -4,7 +4,7 @@ const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "FWC26 API",
+      title: "StickerLab API",
       version: "1.0.0",
       description:
         "FIFA World Cup 2026 API — comparison between Panini album and actual call-ups",

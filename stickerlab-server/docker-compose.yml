@@ -1,15 +1,15 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: fwc26-db
+    container_name: stickerlab-db
     environment:
-      POSTGRES_USER: fwc26
-      POSTGRES_PASSWORD: fwc26pass
-      POSTGRES_DB: fwc26db
+      POSTGRES_USER: stickerlab
+      POSTGRES_PASSWORD: stickerlabpass
+      POSTGRES_DB: stickerlabdb
     ports:
       - "5432:5432"
     volumes:
-      - fwc26_pgdata:/var/lib/postgresql/data
+      - stickerlab_pgdata:/var/lib/postgresql/data
 
 volumes:
-  fwc26_pgdata:
+  stickerlab_pgdata:
