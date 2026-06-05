@@ -9,6 +9,10 @@ export async function clubRoutes(req: IncomingMessage, res: ServerResponse) {
   const url = req.url || "/";
   const method = req.method || "GET";
 
+  if (method === "GET" && url === "/api/clubs") {
+    return controller.getAll(req, res);
+  }
+
   if (method === "GET" && url === "/api/clubs/ranking") {
     return controller.getRanking(req, res);
   }

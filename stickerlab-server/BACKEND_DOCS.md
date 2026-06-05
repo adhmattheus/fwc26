@@ -228,6 +228,7 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 
 | Método | URL                  | Descrição                                  |
 | ------ | -------------------- | ------------------------------------------ |
+| GET    | `/api/clubs`         | Lista todos os clubes                      |
 | GET    | `/api/clubs/ranking` | Ranking de clubes por jogadores convocados |
 
 ### Docs

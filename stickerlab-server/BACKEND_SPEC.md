@@ -8,7 +8,7 @@
 - ✅ **Players**: GET, POST, PUT, DELETE
 - ✅ **Groups**: GET
 - ✅ **Statistics**: GET overall, GET ranking
-- ✅ **Clubs**: GET ranking
+- ✅ **Clubs**: GET all, GET ranking
 - ✅ **Swagger Documentation**: `/api/docs`
 
 ### Planejado (Não Implementado)
@@ -354,7 +354,36 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
 
 | Método | Endpoint             | Descrição                                  |
 | ------ | -------------------- | ------------------------------------------ |
+| GET    | `/api/clubs`         | Lista todos os clubes                      |
 | GET    | `/api/clubs/ranking` | Ranking de clubes por número de convocados |
+
+**Response `/api/clubs`:**
+
+```json
+{
+  "total": 120,
+  "data": [
+    {
+      "id": "uuid",
+      "name": "Real Madrid",
+      "slug": "real-madrid",
+      "countryCode": "ESP",
+      "badgeUrl": "https://cdn.cloudfront.net/clubs-badges/real-madrid.png",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "uuid",
+      "name": "Manchester City",
+      "slug": "manchester-city",
+      "countryCode": "ENG",
+      "badgeUrl": "https://cdn.cloudfront.net/clubs-badges/man-city.png",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    }
+  ]
+}
+```
 
 **Response `/api/clubs/ranking`:**
 

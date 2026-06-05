@@ -9,7 +9,7 @@
 - ✅ Swagger Documentation (`/api/docs`)
 - ✅ AWS S3 Upload (team badges)
 - ✅ **CRUD Completo**: Teams, Players
-- ✅ **Read-Only**: Groups, Statistics
+- ✅ **Read-Only**: Groups, Statistics, Clubs
 
 **Endpoints Ativos:**
 
@@ -27,6 +27,7 @@ PUT    /api/players/:id
 DELETE /api/players/:id
 GET    /api/statistics/overall
 GET    /api/statistics/ranking
+GET    /api/clubs
 GET    /api/clubs/ranking
 ```
 
@@ -47,8 +48,8 @@ GET    /api/clubs/ranking
 
 ### Endpoints
 
-- **10 principais**: teams, players, groups, statistics, clubs, auth (planejado)
-- **Autenticação**: JWT (15min) + Refresh Token (7 dias)
+- **14 ativos**: 5 teams, 4 players, 1 groups, 2 statistics, 2 clubs
+- **Planejado**: Autenticação (JWT + Refresh Token)
 
 ### Storage
 

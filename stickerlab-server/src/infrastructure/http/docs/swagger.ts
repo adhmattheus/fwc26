@@ -605,6 +605,31 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/clubs": {
+        get: {
+          summary: "List all clubs",
+          tags: ["Clubs"],
+          responses: {
+            200: {
+              description: "List of all clubs with total count",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      total: { type: "integer", example: 120 },
+                      data: {
+                        type: "array",
+                        items: { $ref: "#/components/schemas/Club" },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       "/clubs/ranking": {
         get: {
           summary: "Clubs ranking by called-up players",
