@@ -25,18 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { useClubs } from "@/hooks/useClubs";
+import { useAssignPlayerClub } from "@/hooks/usePlayers";
 import type { PlayerResponse } from "@/services/teams.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
-
-const MOCK_CLUBS = [
-  { id: "1", name: "Flamengo" },
-  { id: "2", name: "Palmeiras" },
-  { id: "3", name: "São Paulo" },
-  { id: "4", name: "Corinthians" },
-  { id: "5", name: "Grêmio" },
-];
 
 const schema = z.object({
   clubId: z.string().min(1, "Selecione um clube"),
@@ -48,24 +43,38 @@ interface PlayerAssignClubDialogProps {
   player: PlayerResponse;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (player: PlayerResponse, clubId: string) => Promise<void>;
+  onSuccess?: (player: PlayerResponse) => void;
 }
 
 export function PlayerAssignClubDialog({
   player,
   open,
   onOpenChange,
-  onSubmit,
+  onSuccess,
 }: PlayerAssignClubDialogProps) {
+  const { mutateAsync } = useAssignPlayerClub();
+  const { data: clubs = [], isLoading } = useClubs();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { clubId: "" },
   });
 
   async function handleSubmit(values: FormValues) {
-    await onSubmit(player, values.clubId);
-    form.reset();
-    onOpenChange(false);
+    try {
+      const updated = await mutateAsync({
+        playerId: player.id,
+        clubId: values.clubId,
+      });
+      toast.success("Clube vinculado ao jogador com sucesso.");
+      form.reset();
+      onOpenChange(false);
+      onSuccess?.(updated);
+    } catch (error) {
+      toast.error(
+        "Não foi possível vincular o clube ao jogador. Tente novamente.",
+      );
+    }
   }
 
   function handleCancel() {
@@ -102,11 +111,17 @@ export function PlayerAssignClubDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {MOCK_CLUBS.map((club) => (
-                        <SelectItem key={club.id} value={club.id}>
-                          {club.name}
+                      {isLoading ? (
+                        <SelectItem value="loading" disabled>
+                          Carregando clubes...
                         </SelectItem>
-                      ))}
+                      ) : (
+                        clubs.map((club) => (
+                          <SelectItem key={club.id} value={club.id}>
+                            {club.name}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
