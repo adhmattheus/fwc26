@@ -8,6 +8,7 @@
 - ✅ **Players**: GET, POST, PUT, DELETE
 - ✅ **Groups**: GET
 - ✅ **Statistics**: GET overall, GET ranking
+- ✅ **Clubs**: GET ranking
 - ✅ **Swagger Documentation**: `/api/docs`
 
 ### Planejado (Não Implementado)
@@ -143,18 +144,45 @@
 
 ---
 
+### 4. **Club** (Clube)
+
+```json
+{
+  "id": "uuid",
+  "name": "Real Madrid",
+  "slug": "real-madrid",
+  "country_code": "ESP",
+  "badge_url": "https://s3.amazonaws.com/bucket/clubs-badges/real-madrid.png",
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z"
+}
+```
+
+**Campos:**
+
+- `id`: UUID (PK)
+- `name`: String (único)
+- `slug`: String (único, URL-friendly)
+- `country_code`: String (3 letras, código do país do clube)
+- `badge_url`: String (URL S3)
+- `created_at`: Timestamp
+- `updated_at`: Timestamp
+
+---
+
 ## 📊 RELACIONAMENTOS
 
 ```
 Group (1) ──┬──< (4) Team
             │
-Team (1) ───┴──< (26) Player
+Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
 ```
 
 ### Relações:
 
 1. **Group → Team**: Um grupo tem 4 seleções (1:N)
 2. **Team → Player**: Uma seleção tem N jogadores (1:N)
+3. **Club → Player**: Um clube tem N jogadores convocados (1:N opcional)
 
 **Sem relacionamentos M:N** (jogador pertence a apenas 1 seleção)
 
@@ -319,6 +347,45 @@ Team (1) ───┴──< (26) Player
   }
 ]
 ```
+
+---
+
+### **Clubs**
+
+| Método | Endpoint             | Descrição                                  |
+| ------ | -------------------- | ------------------------------------------ |
+| GET    | `/api/clubs/ranking` | Ranking de clubes por número de convocados |
+
+**Response `/api/clubs/ranking`:**
+
+```json
+[
+  {
+    "id": "uuid",
+    "name": "Real Madrid",
+    "slug": "real-madrid",
+    "countryCode": "ESP",
+    "badgeUrl": "https://cdn.cloudfront.net/clubs-badges/real-madrid.png",
+    "playerCount": 15,
+    "percentage": 1.2
+  },
+  {
+    "id": "uuid",
+    "name": "Manchester City",
+    "slug": "manchester-city",
+    "countryCode": "ENG",
+    "badgeUrl": "https://cdn.cloudfront.net/clubs-badges/man-city.png",
+    "playerCount": 12,
+    "percentage": 0.96
+  }
+]
+```
+
+**Cálculo:**
+
+- `playerCount`: Total de jogadores convocados que jogam no clube
+- `percentage`: (playerCount / 1248 total convocados) × 100
+- Ordenado por `playerCount` (decrescente)
 
 ---
 

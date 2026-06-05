@@ -2,6 +2,7 @@ import { readFileSync } from "fs";
 import { IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import { swaggerSpec } from "./docs/swagger";
+import { clubRoutes } from "./routes/clubRoutes";
 import { groupRoutes } from "./routes/groupRoutes";
 import { playerRoutes } from "./routes/playerRoutes";
 import { statisticsRoutes } from "./routes/statisticsRoutes";
@@ -71,6 +72,7 @@ export async function router(req: IncomingMessage, res: ServerResponse) {
       return;
     }
 
+    if (url.startsWith("/api/clubs")) return await clubRoutes(req, res);
     if (url.startsWith("/api/groups")) return await groupRoutes(req, res);
     if (url.startsWith("/api/teams")) return await teamRoutes(req, res);
     if (url.startsWith("/api/players")) return await playerRoutes(req, res);

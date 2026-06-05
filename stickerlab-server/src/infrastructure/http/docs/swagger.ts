@@ -60,6 +60,40 @@ const options: swaggerJsdoc.Options = {
             updatedAt: { type: "string", format: "date-time" },
           },
         },
+        Club: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            name: { type: "string", example: "Real Madrid" },
+            slug: { type: "string", example: "real-madrid" },
+            countryCode: { type: "string", example: "ESP" },
+            badgeUrl: {
+              type: "string",
+              nullable: true,
+              example:
+                "https://cdn.cloudfront.net/clubs-badges/real-madrid.png",
+            },
+            createdAt: { type: "string", format: "date-time" },
+            updatedAt: { type: "string", format: "date-time" },
+          },
+        },
+        ClubRanking: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            name: { type: "string", example: "Real Madrid" },
+            slug: { type: "string", example: "real-madrid" },
+            countryCode: { type: "string", example: "ESP" },
+            badgeUrl: {
+              type: "string",
+              nullable: true,
+              example:
+                "https://cdn.cloudfront.net/clubs-badges/real-madrid.png",
+            },
+            playerCount: { type: "integer", example: 15 },
+            percentage: { type: "number", example: 1.2 },
+          },
+        },
         Statistics: {
           type: "object",
           properties: {
@@ -564,6 +598,25 @@ const options: swaggerJsdoc.Options = {
                         statistics: { $ref: "#/components/schemas/Statistics" },
                       },
                     },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/clubs/ranking": {
+        get: {
+          summary: "Clubs ranking by called-up players",
+          tags: ["Clubs"],
+          responses: {
+            200: {
+              description: "Clubs ranking by number of called-up players",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "array",
+                    items: { $ref: "#/components/schemas/ClubRanking" },
                   },
                 },
               },

@@ -224,6 +224,12 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 | GET    | `/api/statistics/overall` | Estatísticas gerais de todas as seleções      |
 | GET    | `/api/statistics/ranking` | Ranking de seleções por taxa de acerto Panini |
 
+### Clubs
+
+| Método | URL                  | Descrição                                  |
+| ------ | -------------------- | ------------------------------------------ |
+| GET    | `/api/clubs/ranking` | Ranking de clubes por jogadores convocados |
+
 ### Docs
 
 | Método | URL              | Descrição                     |

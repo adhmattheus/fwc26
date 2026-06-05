@@ -27,6 +27,7 @@ PUT    /api/players/:id
 DELETE /api/players/:id
 GET    /api/statistics/overall
 GET    /api/statistics/ranking
+GET    /api/clubs/ranking
 ```
 
 ### ⏳ Planejado (Não Implementado)
@@ -41,12 +42,12 @@ GET    /api/statistics/ranking
 
 ### Entidades
 
-- **3 principais**: Team, Player, Group
-- **2 auth**: User, RefreshToken
+- **4 principais**: Team, Player, Group, Club
+- **2 auth** (planejado): User, RefreshToken
 
 ### Endpoints
 
-- **9 principais**: teams, players, groups, statistics, auth
+- **10 principais**: teams, players, groups, statistics, clubs, auth (planejado)
 - **Autenticação**: JWT (15min) + Refresh Token (7 dias)
 
 ### Storage
