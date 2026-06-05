@@ -16,7 +16,7 @@ interface PlayerCardProps {
   player: PlayerResponse;
   showCode?: boolean;
   cardClassName?: string;
-  onAddClub?: (player: PlayerResponse, clubId: string) => void;
+  onAddClub?: (player: PlayerResponse) => void;
 }
 
 export function PlayerCard({
@@ -57,7 +57,7 @@ export function PlayerCard({
         player={player}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        onSubmit={(p, clubId) => onAddClub?.(p, clubId)}
+        onSuccess={(updated) => onAddClub?.(updated)}
       />
     </>
   );

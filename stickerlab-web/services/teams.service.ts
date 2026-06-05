@@ -1,4 +1,5 @@
 import { api } from "./api";
+import { ClubResponse } from "./clubs.service";
 
 export interface TeamResponse {
   id: string;
@@ -21,6 +22,10 @@ export interface PlayerResponse {
   inAlbum: boolean;
   calledUp: boolean;
   teamId: string;
+  clubId: string | null;
+  club?: ClubResponse | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TeamDetailResponse {
