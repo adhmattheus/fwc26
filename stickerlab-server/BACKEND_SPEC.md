@@ -1,4 +1,24 @@
-# Especificação Back-End - FIFA World Cup 2026 Panini Album
+# Especificação Back-End - StickerLab
+
+## ✅ STATUS DE IMPLEMENTAÇÃO
+
+### Endpoints Implementados
+
+- ✅ **Teams**: GET, POST, PUT, DELETE, Upload Badge
+- ✅ **Players**: GET, POST, PUT, DELETE
+- ✅ **Groups**: GET
+- ✅ **Statistics**: GET overall, GET ranking
+- ✅ **Swagger Documentation**: `/api/docs`
+
+### Planejado (Não Implementado)
+
+- ⏳ **Autenticação**: Login, JWT, Refresh Tokens
+- ⏳ **Entidades Auth**: User, RefreshToken
+- ⏳ **Middleware**: authMiddleware (JWT verification)
+
+> **Nota**: A autenticação está documentada para implementação futura. Atualmente, todos os endpoints CRUD estão públicos.
+
+---
 
 ## 📋 ESCOPO DO FRONT-END
 
@@ -6,7 +26,7 @@
 
 #### 1. **Home Page** (`/`)
 
-- **Header**: Badge FIFA World Cup 2026 + título
+- **Header**: Badge StickerLab + título
 - **Overall Statistics**: Card com 4 métricas agregadas
   - Panini Accuracy Rate (%)
   - Error Rate (%)
@@ -144,13 +164,13 @@ Team (1) ───┴──< (26) Player
 
 ### **Teams**
 
-| Método | Endpoint           | Descrição               |
-| ------ | ------------------ | ----------------------- |
-| GET    | `/api/teams`       | Lista todas as seleções |
-| GET    | `/api/teams/:id` | Busca seleção por ID  |
-| POST   | `/api/teams`       | Cria nova seleção       |
-| PUT    | `/api/teams/:id`   | Atualiza seleção        |
-| DELETE | `/api/teams/:id`   | Remove seleção          |
+| Método | Endpoint         | Descrição               |
+| ------ | ---------------- | ----------------------- |
+| GET    | `/api/teams`     | Lista todas as seleções |
+| GET    | `/api/teams/:id` | Busca seleção por ID    |
+| POST   | `/api/teams`     | Cria nova seleção       |
+| PUT    | `/api/teams/:id` | Atualiza seleção        |
+| DELETE | `/api/teams/:id` | Remove seleção          |
 
 **Response `/api/teams/:id`:**
 
@@ -311,7 +331,7 @@ Team (1) ───┴──< (26) Player
 ```json
 {
   "id": "uuid",
-  "email": "admin@worldcup.com",
+  "email": "admin@stickerlab.com",
   "password_hash": "bcrypt_hash",
   "name": "Admin",
   "role": "admin",
@@ -361,7 +381,7 @@ Team (1) ───┴──< (26) Player
 #### **S3 Bucket Structure**
 
 ```
-worldcup-2026-album/
+stickerlab-album/
 ├── teams-badges/
 │   ├── bra.png
 │   ├── arg.png
@@ -436,11 +456,9 @@ Calculados dinamicamente via queries:
 (jogadores in_album AND called_up / total jogadores in_album) * 100
 ```
 
-
 ```
 (jogadores in_album AND called_up / total jogadores called_up) * 100
 ```
-
 
 ```
 (jogadores called_up AND NOT in_album / total jogadores called_up) * 100
@@ -656,13 +674,13 @@ ORDER BY panini_accuracy_rate DESC;
 ### Exemplo .env
 
 ```
-DATABASE_URL=postgresql://user:pass@host:5432/worldcup
+DATABASE_URL=postgresql://user:pass@host:5432/stickerlab
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=15m
 REFRESH_TOKEN_SECRET=your-refresh-secret
 REFRESH_TOKEN_EXPIRES_IN=7d
 AWS_REGION=us-east-1
-AWS_S3_BUCKET=worldcup-2026-album
+AWS_S3_BUCKET=stickerlab-album
 AWS_CLOUDFRONT_URL=https://d123.cloudfront.net
 AWS_ACCESS_KEY_ID=AKIA...
 AWS_SECRET_ACCESS_KEY=...
@@ -759,7 +777,7 @@ async function seed() {
 ### Upload S3
 
 - **Arquivo**: PNG (badges)
-- **Bucket**: `worldcup-2026-album/teams-badges/`
+- **Bucket**: `stickerlab-album/teams-badges/`
 - **Acesso**: Público via CloudFront
 - **Delete**: Cascade quando deletar Team
 

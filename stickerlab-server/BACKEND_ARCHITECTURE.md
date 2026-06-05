@@ -183,6 +183,132 @@
 
 ---
 
+### 4. Admin - CRUD Operations (Implementados)
+
+#### **Create Team**
+
+```
+┌─────────────┐
+│  Admin UI   │
+└──────┬──────┘
+       │
+       │ POST /api/teams
+       │ Content-Type: application/json
+       │ {
+       │   "name": "Argentina",
+       │   "fifaCode": "ARG",
+       │   "groupId": "uuid",
+       │   "colorPrimary": "#75AADB",
+       │   "colorSecondary": "#FFFFFF"
+       │ }
+       │
+       ▼
+┌─────────────┐     ┌──────────────┐
+│  API Server │────▶│ PostgreSQL   │
+│ Controller  │     │ INSERT team  │
+└──────┬──────┘     └──────────────┘
+       │
+       │ Response: Team created (201)
+       │
+       ▼
+┌─────────────┐
+│  Admin UI   │
+└─────────────┘
+```
+
+#### **Update Team**
+
+```
+┌─────────────┐
+│  Admin UI   │
+└──────┬──────┘
+       │
+       │ PUT /api/teams/:id
+       │ {
+       │   "name": "Brasil",
+       │   "colorPrimary": "#009739",
+       │   ...
+       │ }
+       │
+       ▼
+┌─────────────┐     ┌──────────────┐
+│  API Server │────▶│ PostgreSQL   │
+│ Controller  │     │ UPDATE team  │
+└──────┬──────┘     └──────────────┘
+       │
+       │ Response: Team updated (200)
+       │
+       ▼
+┌─────────────┐
+│  Admin UI   │
+└─────────────┘
+```
+
+#### **Delete Team**
+
+```
+┌─────────────┐
+│  Admin UI   │
+└──────┬──────┘
+       │
+       │ DELETE /api/teams/:id
+       │
+       ▼
+┌─────────────┐     ┌──────────────┐
+│  API Server │────▶│ PostgreSQL   │
+│ Controller  │     │ DELETE team  │
+└──────┬──────┘     │ + players    │
+       │            └──────────────┘
+       │
+       │ Response: Team deleted (200)
+       │
+       ▼
+┌─────────────┐
+│  Admin UI   │
+└─────────────┘
+```
+
+#### **Create/Update/Delete Player**
+
+```
+┌─────────────┐
+│  Admin UI   │
+└──────┬──────┘
+       │
+       │ POST   /api/players
+       │ PUT    /api/players/:id
+       │ DELETE /api/players/:id
+       │
+       │ Body (POST/PUT):
+       │ {
+       │   "name": "Alisson",
+       │   "canonicalName": "Alisson",
+       │   "albumCode": "BRA-2",
+       │   "inAlbum": true,
+       │   "calledUp": true,
+       │   "teamId": "uuid"
+       │ }
+       │
+       ▼
+┌─────────────┐     ┌──────────────┐
+│  API Server │────▶│ PostgreSQL   │
+│ Controller  │     │ players table│
+└──────┬──────┘     └──────────────┘
+       │
+       │ Response: Player created/updated/deleted
+       │
+       ▼
+┌─────────────┐
+│  Admin UI   │
+└─────────────┘
+```
+
+**GET /api/players** também está implementado com query params:
+
+- `?team_id=uuid` - Filtra jogadores por time
+
+---
+
 ## 🏗️ Arquitetura de Camadas
 
 ```

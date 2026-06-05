@@ -7,7 +7,7 @@ const options: swaggerJsdoc.Options = {
       title: "StickerLab API",
       version: "1.0.0",
       description:
-        "FIFA World Cup 2026 API — comparison between Panini album and actual call-ups",
+        "StickerLab API — comparison between Panini album and actual call-ups",
     },
     servers: [
       {
