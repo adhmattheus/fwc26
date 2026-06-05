@@ -213,20 +213,20 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 
 ### Players
 
-| Método | URL                          | Descrição                           |
-| ------ | ---------------------------- | ----------------------------------- |
-| GET    | `/api/players?team_id=`      | Lista jogadores de uma seleção      |
-| POST   | `/api/players`               | Cria um novo jogador                |
-| PUT    | `/api/players/:id`           | Atualiza dados de um jogador        |
-| DELETE | `/api/players/:id`           | Remove um jogador                   |
-| PATCH  | `/api/players/:id/club`      | Associa um clube a um jogador       |
+| Método | URL                     | Descrição                      |
+| ------ | ----------------------- | ------------------------------ |
+| GET    | `/api/players?team_id=` | Lista jogadores de uma seleção |
+| POST   | `/api/players`          | Cria um novo jogador           |
+| PUT    | `/api/players/:id`      | Atualiza dados de um jogador   |
+| DELETE | `/api/players/:id`      | Remove um jogador              |
+| PATCH  | `/api/players/:id/club` | Associa um clube a um jogador  |
 
 ### Statistics
 
-| Método | URL                       | Descrição                                     |
-| ------ | ------------------------- | --------------------------------------------- |
-| GET    | `/api/statistics/overall` | Estatísticas gerais de todas as seleções      |
-| GET    | `/api/statistics/ranking` | Ranking de seleções por taxa de acerto Panini |
+| Método | URL                       | Descrição                                                          |
+| ------ | ------------------------- | ------------------------------------------------------------------ |
+| GET    | `/api/statistics/overall` | Estatísticas gerais de todas as seleções + clube mais representado |
+| GET    | `/api/statistics/ranking` | Ranking de seleções por taxa de acerto Panini                      |
 
 ### Clubs
 
@@ -252,6 +252,11 @@ Para cada seleção, os jogadores são divididos em grupos e as métricas calcul
 | ------------------------ | ------------------------------------------------------ |
 | **Panini Accuracy Rate** | (no álbum E convocados) ÷ (total no álbum) × 100       |
 | **Error Rate**           | (no álbum MAS não convocados) ÷ (total no álbum) × 100 |
+
+**Estatísticas Gerais** (endpoint `/api/statistics/overall`):
+
+- Incluem agregados de todas as seleções
+- **Novo campo**: `mostRepresentedClub` - identifica o clube com mais jogadores convocados, sua porcentagem de representação e contagem total
 
 ---
 

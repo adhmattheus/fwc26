@@ -332,9 +332,22 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
   "totalOnlyInAlbum": 60,
   "totalCalledUpWithoutSticker": 156,
   "paniniAccuracyRate": 72.2,
-  "errorRate": 27.8
+  "errorRate": 27.8,
+  "mostRepresentedClub": {
+    "club": "Real Madrid CF",
+    "percentage": 21.5,
+    "playerCount": 120,
+    "totalPlayers": 1248
+  }
 }
 ```
+
+**Campo `mostRepresentedClub`:**
+
+- `club`: Nome do clube mais representado entre os convocados
+- `percentage`: Porcentagem de representação (playerCount / totalPlayers \* 100)
+- `playerCount`: Número de jogadores daquele clube convocados
+- `totalPlayers`: Total de jogadores convocados de todas as seleções
 
 **Response `/api/statistics/ranking`:**
 

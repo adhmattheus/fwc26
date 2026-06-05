@@ -439,7 +439,8 @@ const options: swaggerJsdoc.Options = {
         },
         post: {
           summary: "Create player",
-          description: "Creates a player. `clubId` is optional — if omitted, use `PATCH /players/{id}/club` to assign a club afterwards.",
+          description:
+            "Creates a player. `clubId` is optional — if omitted, use `PATCH /players/{id}/club` to assign a club afterwards.",
           tags: ["Players"],
           requestBody: {
             required: true,
@@ -457,11 +458,20 @@ const options: swaggerJsdoc.Options = {
                   properties: {
                     name: { type: "string", example: "Alisson" },
                     canonicalName: { type: "string", example: "Alisson" },
-                    albumCode: { type: "string", nullable: true, example: "BRA-2" },
+                    albumCode: {
+                      type: "string",
+                      nullable: true,
+                      example: "BRA-2",
+                    },
                     inAlbum: { type: "boolean", example: true },
                     calledUp: { type: "boolean", example: true },
                     teamId: { type: "string", format: "uuid" },
-                    clubId: { type: "string", format: "uuid", nullable: true, description: "Optional — assign a club at creation time" },
+                    clubId: {
+                      type: "string",
+                      format: "uuid",
+                      nullable: true,
+                      description: "Optional — assign a club at creation time",
+                    },
                   },
                 },
               },
@@ -482,7 +492,8 @@ const options: swaggerJsdoc.Options = {
       "/players/{id}": {
         put: {
           summary: "Update player",
-          description: "Updates player fields. `clubId` can also be set here or via `PATCH /players/{id}/club`.",
+          description:
+            "Updates player fields. `clubId` can also be set here or via `PATCH /players/{id}/club`.",
           tags: ["Players"],
           parameters: [
             {
@@ -503,7 +514,12 @@ const options: swaggerJsdoc.Options = {
                     albumCode: { type: "string", nullable: true },
                     inAlbum: { type: "boolean" },
                     calledUp: { type: "boolean" },
-                    clubId: { type: "string", format: "uuid", nullable: true, description: "Optional — assign or remove a club" },
+                    clubId: {
+                      type: "string",
+                      format: "uuid",
+                      nullable: true,
+                      description: "Optional — assign or remove a club",
+                    },
                   },
                 },
               },
@@ -511,7 +527,8 @@ const options: swaggerJsdoc.Options = {
           },
           responses: {
             200: {
-              description: "Player updated. Response includes the current club relation.",
+              description:
+                "Player updated. Response includes the current club relation.",
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/Player" },
@@ -644,6 +661,16 @@ const options: swaggerJsdoc.Options = {
                       },
                       paniniAccuracyRate: { type: "number", example: 72.22 },
                       errorRate: { type: "number", example: 27.78 },
+                      mostRepresentedClub: {
+                        type: "object",
+                        nullable: true,
+                        properties: {
+                          club: { type: "string", example: "Real Madrid CF" },
+                          percentage: { type: "number", example: 21.5 },
+                          playerCount: { type: "integer", example: 120 },
+                          totalPlayers: { type: "integer", example: 1248 },
+                        },
+                      },
                     },
                   },
                 },

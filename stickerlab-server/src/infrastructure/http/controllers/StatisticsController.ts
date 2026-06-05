@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { GetOverallStatisticsUseCase } from "../../../application/use-cases/GetOverallStatisticsUseCase";
 import { GetRankingUseCase } from "../../../application/use-cases/GetRankingUseCase";
 import { AppError } from "../../../shared/errors/AppError";
+import { ClubRepository } from "../../database/repositories/ClubRepository";
 import { PlayerRepository } from "../../database/repositories/PlayerRepository";
 import { TeamRepository } from "../../database/repositories/TeamRepository";
 import { sendError, sendJson } from "../helpers/httpResponse";
@@ -13,9 +14,11 @@ export class StatisticsController {
   constructor() {
     const teamRepository = new TeamRepository();
     const playerRepository = new PlayerRepository();
+    const clubRepository = new ClubRepository();
     this.getOverallStatisticsUseCase = new GetOverallStatisticsUseCase(
       teamRepository,
       playerRepository,
+      clubRepository,
     );
     this.getRankingUseCase = new GetRankingUseCase(
       teamRepository,
