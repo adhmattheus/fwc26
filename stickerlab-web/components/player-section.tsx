@@ -1,4 +1,4 @@
-import { PlayerCard } from "@/components/player-card";
+import { PlayerCard } from "@/components/player/player-card";
 import { Badge } from "@/components/ui/badge";
 import type { PlayerResponse } from "@/services/teams.service";
 
@@ -7,7 +7,7 @@ interface PlayerSectionProps {
   count: number;
   players: PlayerResponse[];
   variant: "green" | "amber" | "red";
-  showCodigo?: boolean;
+  showCode?: boolean;
 }
 
 const variantStyles = {
@@ -36,7 +36,7 @@ export function PlayerSection({
   count,
   players,
   variant,
-  showCodigo = true,
+  showCode = true,
 }: PlayerSectionProps) {
   const styles = variantStyles[variant];
 
@@ -58,7 +58,7 @@ export function PlayerSection({
             <PlayerCard
               key={player.id}
               player={player}
-              showCodigo={showCodigo}
+              showCode={showCode}
               cardClassName={styles.card}
             />
           ))

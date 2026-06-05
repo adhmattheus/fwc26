@@ -139,7 +139,7 @@ export default async function TeamPage({ params }: PageProps) {
             count={comparison.calledUpWithoutSticker.total}
             players={comparison.calledUpWithoutSticker.players}
             variant="red"
-            showCodigo={false}
+            showCode={false}
           />
         </div>
       </div>
