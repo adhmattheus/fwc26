@@ -10,6 +10,7 @@ interface StatisticCardProps {
   label: string;
   description: string;
   showBadge?: boolean;
+  isPercentage?: boolean;
 }
 
 export function StatisticCard({
@@ -17,6 +18,7 @@ export function StatisticCard({
   label,
   description,
   showBadge = false,
+  isPercentage = true,
 }: StatisticCardProps) {
   const accuracyLevel = getAccuracyLabel(value);
   const variant = getAccuracyVariant(value);
@@ -32,7 +34,7 @@ export function StatisticCard({
     <div className="p-4 rounded-lg bg-muted/50">
       <div className="flex items-baseline gap-2 mb-1">
         <span className="text-2xl font-bold text-foreground">
-          {formatPercentage(value)}
+          {isPercentage ? formatPercentage(value) : value}
         </span>
         {showBadge && (
           <span className={`text-xs px-2 py-0.5 rounded ${styles.badge}`}>

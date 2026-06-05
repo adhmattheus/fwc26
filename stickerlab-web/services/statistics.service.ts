@@ -1,6 +1,13 @@
 import { api } from "./api";
 import type { TeamResponse } from "./teams.service";
 
+export interface MostRepresentedClub {
+  club: string;
+  percentage: number;
+  playerCount: number;
+  totalPlayers: number;
+}
+
 export interface OverallStatisticsResponse {
   totalTeams: number;
   totalAlbumPlayers: number;
@@ -10,6 +17,7 @@ export interface OverallStatisticsResponse {
   totalCalledUpWithoutSticker: number;
   paniniAccuracyRate: number;
   errorRate: number;
+  mostRepresentedClub: MostRepresentedClub | null;
 }
 
 export interface RankingItemResponse {

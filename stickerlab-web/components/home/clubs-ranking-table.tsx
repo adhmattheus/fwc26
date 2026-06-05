@@ -1,39 +1,20 @@
-import { ROUTES, SIZES } from "@/lib/constants";
-import { getAccuracyBadgeClasses } from "@/lib/styles";
+import { SIZES } from "@/lib/constants";
 import { formatPercentage } from "@/lib/utils";
+import type { ClubRankingItem } from "@/services/clubs.service";
 import Image from "next/image";
-import Link from "next/link";
 
-interface TeamStats {
-  paniniAccuracyRate: number;
-  errorRate: number;
+interface ClubsRankingTableProps {
+  ranking: ClubRankingItem[];
 }
 
-interface RankingTeam {
-  id: string;
-  name: string;
-  slug: string;
-  badgeUrl: string | null;
-}
-
-interface RankingItem {
-  rank: number;
-  team: RankingTeam;
-  statistics: TeamStats;
-}
-
-interface RankingTableProps {
-  ranking: RankingItem[];
-}
-
-export function RankingTable({ ranking }: RankingTableProps) {
+export function ClubsRankingTable({ ranking }: ClubsRankingTableProps) {
   return (
     <section className="bg-card rounded-xl shadow-lg p-6 border">
       <h2 className="text-xl font-bold text-foreground mb-4">
-        📊 StickerLab Accuracy Ranking
+        ⚽ Clubs Ranking
       </h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Percentage of album players that were called up
+        Clubs ranked by called-up players
       </p>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -43,32 +24,31 @@ export function RankingTable({ ranking }: RankingTableProps) {
                 Rank
               </th>
               <th className="text-left py-2 px-3 text-sm font-semibold text-foreground">
-                Team
+                Club
               </th>
               <th className="text-center py-2 px-3 text-sm font-semibold text-foreground">
-                Accuracy
+                Country
               </th>
               <th className="text-center py-2 px-3 text-sm font-semibold text-foreground">
-                Error Rate
+                Players
+              </th>
+              <th className="text-center py-2 px-3 text-sm font-semibold text-foreground">
+                Percentage
               </th>
             </tr>
           </thead>
           <tbody>
-            {ranking.map(({ team, statistics, rank }) => (
+            {ranking.map((club, index) => (
               <tr
-                key={team.id}
+                key={club.id}
                 className="border-b hover:bg-muted/50 transition-colors"
               >
                 <td className="py-3 px-3 text-sm text-muted-foreground">
-                  #{rank}
+                  #{index + 1}
                 </td>
                 <td className="py-3 px-3">
-                  <Link
-                    href={ROUTES.TEAM(team.id)}
-                    className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
-                    aria-label={`View details for ${team.name}`}
-                  >
-                    {team.badgeUrl && (
+                  <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                    {club.badgeUrl && (
                       <div
                         className="relative shrink-0"
                         style={{
@@ -77,8 +57,8 @@ export function RankingTable({ ranking }: RankingTableProps) {
                         }}
                       >
                         <Image
-                          src={team.badgeUrl}
-                          alt={`${team.name} badge`}
+                          src={club.badgeUrl}
+                          alt={`${club.name} badge`}
                           fill
                           className="object-contain"
                           unoptimized
@@ -86,18 +66,19 @@ export function RankingTable({ ranking }: RankingTableProps) {
                         />
                       </div>
                     )}
-                    <span>{team.name}</span>
-                  </Link>
+                    <span>{club.name}</span>
+                  </div>
+                </td>
+                <td className="py-3 px-3 text-center text-sm font-medium text-foreground">
+                  {club.countryCode}
+                </td>
+                <td className="py-3 px-3 text-center text-sm font-medium text-foreground">
+                  {club.playerCount}
                 </td>
                 <td className="py-3 px-3 text-center">
-                  <span
-                    className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-semibold ${getAccuracyBadgeClasses(statistics.paniniAccuracyRate)}`}
-                  >
-                    {formatPercentage(statistics.paniniAccuracyRate)}
+                  <span className="inline-flex items-center justify-center px-2 py-1 rounded text-xs font-semibold bg-primary/10 text-primary">
+                    {formatPercentage(club.percentage)}
                   </span>
-                </td>
-                <td className="py-3 px-3 text-center text-sm text-muted-foreground">
-                  {formatPercentage(statistics.errorRate)}
                 </td>
               </tr>
             ))}
