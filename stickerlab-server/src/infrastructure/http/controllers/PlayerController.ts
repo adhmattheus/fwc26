@@ -2,8 +2,10 @@ import { IncomingMessage, ServerResponse } from "http";
 import { CreatePlayerUseCase } from "../../../application/use-cases/CreatePlayerUseCase";
 import { DeletePlayerUseCase } from "../../../application/use-cases/DeletePlayerUseCase";
 import { GetAllPlayersUseCase } from "../../../application/use-cases/GetAllPlayersUseCase";
+import { UpdatePlayerClubUseCase } from "../../../application/use-cases/UpdatePlayerClubUseCase";
 import { UpdatePlayerUseCase } from "../../../application/use-cases/UpdatePlayerUseCase";
 import { AppError } from "../../../shared/errors/AppError";
+import { ClubRepository } from "../../database/repositories/ClubRepository";
 import { PlayerRepository } from "../../database/repositories/PlayerRepository";
 import { sendError, sendJson } from "../helpers/httpResponse";
 import { parseBody } from "../helpers/parseBody";
@@ -13,6 +15,7 @@ export class PlayerController {
   private createPlayerUseCase: CreatePlayerUseCase;
   private updatePlayerUseCase: UpdatePlayerUseCase;
   private deletePlayerUseCase: DeletePlayerUseCase;
+  private updatePlayerClubUseCase: UpdatePlayerClubUseCase;
 
   constructor() {
     const playerRepository = new PlayerRepository();
@@ -20,6 +23,11 @@ export class PlayerController {
     this.createPlayerUseCase = new CreatePlayerUseCase(playerRepository);
     this.updatePlayerUseCase = new UpdatePlayerUseCase(playerRepository);
     this.deletePlayerUseCase = new DeletePlayerUseCase(playerRepository);
+    const clubRepository = new ClubRepository();
+    this.updatePlayerClubUseCase = new UpdatePlayerClubUseCase(
+      playerRepository,
+      clubRepository,
+    );
   }
 
   async getAll(req: IncomingMessage, res: ServerResponse) {
@@ -66,6 +74,7 @@ export class PlayerController {
         albumCode?: string;
         inAlbum?: boolean;
         calledUp?: boolean;
+        clubId?: string | null;
       }>(req);
       const player = await this.updatePlayerUseCase.execute(id, body);
       sendJson(res, 200, player);
@@ -82,6 +91,25 @@ export class PlayerController {
     try {
       await this.deletePlayerUseCase.execute(id);
       sendJson(res, 200, { message: "Player deleted successfully" });
+    } catch (error) {
+      if (error instanceof AppError) {
+        sendError(res, error.statusCode, error.message);
+      } else {
+        sendError(res, 500, "Internal server error");
+      }
+    }
+  }
+
+  async updateClub(req: IncomingMessage, res: ServerResponse, id: string) {
+    try {
+      const body = await parseBody<{ clubId: string }>(req);
+      if (!body.clubId) return sendError(res, 400, "clubId is required");
+
+      const player = await this.updatePlayerClubUseCase.execute(
+        id,
+        body.clubId,
+      );
+      sendJson(res, 200, player);
     } catch (error) {
       if (error instanceof AppError) {
         sendError(res, error.statusCode, error.message);

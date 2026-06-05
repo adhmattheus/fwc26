@@ -56,6 +56,8 @@ const options: swaggerJsdoc.Options = {
             inAlbum: { type: "boolean", example: true },
             calledUp: { type: "boolean", example: true },
             teamId: { type: "string", format: "uuid" },
+            clubId: { type: "string", format: "uuid", nullable: true },
+            club: { $ref: "#/components/schemas/Club", nullable: true },
             createdAt: { type: "string", format: "date-time" },
             updatedAt: { type: "string", format: "date-time" },
           },
@@ -437,6 +439,7 @@ const options: swaggerJsdoc.Options = {
         },
         post: {
           summary: "Create player",
+          description: "Creates a player. `clubId` is optional — if omitted, use `PATCH /players/{id}/club` to assign a club afterwards.",
           tags: ["Players"],
           requestBody: {
             required: true,
@@ -454,10 +457,11 @@ const options: swaggerJsdoc.Options = {
                   properties: {
                     name: { type: "string", example: "Alisson" },
                     canonicalName: { type: "string", example: "Alisson" },
-                    albumCode: { type: "string", example: "BRA-2" },
+                    albumCode: { type: "string", nullable: true, example: "BRA-2" },
                     inAlbum: { type: "boolean", example: true },
                     calledUp: { type: "boolean", example: true },
                     teamId: { type: "string", format: "uuid" },
+                    clubId: { type: "string", format: "uuid", nullable: true, description: "Optional — assign a club at creation time" },
                   },
                 },
               },
@@ -478,6 +482,7 @@ const options: swaggerJsdoc.Options = {
       "/players/{id}": {
         put: {
           summary: "Update player",
+          description: "Updates player fields. `clubId` can also be set here or via `PATCH /players/{id}/club`.",
           tags: ["Players"],
           parameters: [
             {
@@ -495,9 +500,10 @@ const options: swaggerJsdoc.Options = {
                   properties: {
                     name: { type: "string" },
                     canonicalName: { type: "string" },
-                    albumCode: { type: "string" },
+                    albumCode: { type: "string", nullable: true },
                     inAlbum: { type: "boolean" },
                     calledUp: { type: "boolean" },
+                    clubId: { type: "string", format: "uuid", nullable: true, description: "Optional — assign or remove a club" },
                   },
                 },
               },
@@ -505,10 +511,18 @@ const options: swaggerJsdoc.Options = {
           },
           responses: {
             200: {
-              description: "Player updated",
+              description: "Player updated. Response includes the current club relation.",
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/Player" },
+                },
+              },
+            },
+            404: {
+              description: "Player not found",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
                 },
               },
             },
@@ -539,6 +553,65 @@ const options: swaggerJsdoc.Options = {
                       },
                     },
                   },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/players/{id}/club": {
+        patch: {
+          summary: "Assign a club to a player",
+          tags: ["Players"],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "Player ID",
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["clubId"],
+                  properties: {
+                    clubId: {
+                      type: "string",
+                      format: "uuid",
+                      example: "550e8400-e29b-41d4-a716-446655440000",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Player with updated club",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Player" },
+                },
+              },
+            },
+            400: {
+              description: "clubId is required",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+            404: {
+              description: "Player or Club not found",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
                 },
               },
             },

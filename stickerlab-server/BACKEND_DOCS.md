@@ -84,7 +84,10 @@ src/
 │       ├── DeleteTeamUseCase.ts
 │       ├── CreatePlayerUseCase.ts
 │       ├── UpdatePlayerUseCase.ts
+│       ├── UpdatePlayerClubUseCase.ts
 │       ├── DeletePlayerUseCase.ts
+│       ├── GetAllClubsUseCase.ts
+│       ├── GetClubRankingUseCase.ts
 │       └── UploadTeamBadgeUseCase.ts
 │
 ├── infrastructure/                  # Camada 3 — O mundo real
@@ -210,12 +213,13 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 
 ### Players
 
-| Método | URL                     | Descrição                      |
-| ------ | ----------------------- | ------------------------------ |
-| GET    | `/api/players?team_id=` | Lista jogadores de uma seleção |
-| POST   | `/api/players`          | Cria um novo jogador           |
-| PUT    | `/api/players/:id`      | Atualiza dados de um jogador   |
-| DELETE | `/api/players/:id`      | Remove um jogador              |
+| Método | URL                          | Descrição                           |
+| ------ | ---------------------------- | ----------------------------------- |
+| GET    | `/api/players?team_id=`      | Lista jogadores de uma seleção      |
+| POST   | `/api/players`               | Cria um novo jogador                |
+| PUT    | `/api/players/:id`           | Atualiza dados de um jogador        |
+| DELETE | `/api/players/:id`           | Remove um jogador                   |
+| PATCH  | `/api/players/:id/club`      | Associa um clube a um jogador       |
 
 ### Statistics
 

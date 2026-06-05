@@ -25,6 +25,7 @@ GET    /api/players
 POST   /api/players
 PUT    /api/players/:id
 DELETE /api/players/:id
+PATCH  /api/players/:id/club
 GET    /api/statistics/overall
 GET    /api/statistics/ranking
 GET    /api/clubs
@@ -48,7 +49,7 @@ GET    /api/clubs/ranking
 
 ### Endpoints
 
-- **14 ativos**: 5 teams, 4 players, 1 groups, 2 statistics, 2 clubs
+- **15 ativos**: 5 teams, 5 players, 1 groups, 2 statistics, 2 clubs
 - **Planejado**: Autenticação (JWT + Refresh Token)
 
 ### Storage

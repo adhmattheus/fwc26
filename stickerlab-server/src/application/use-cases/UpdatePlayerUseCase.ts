@@ -6,6 +6,7 @@ interface UpdatePlayerInput {
   albumCode?: string;
   inAlbum?: boolean;
   calledUp?: boolean;
+  clubId?: string | null;
 }
 
 export class UpdatePlayerUseCase {

@@ -295,15 +295,27 @@
        │ POST   /api/players
        │ PUT    /api/players/:id
        │ DELETE /api/players/:id
+       │ PATCH  /api/players/:id/club
        │
-       │ Body (POST/PUT):
+       │ Body (POST):
        │ {
        │   "name": "Alisson",
        │   "canonicalName": "Alisson",
        │   "albumCode": "BRA-2",
        │   "inAlbum": true,
        │   "calledUp": true,
-       │   "teamId": "uuid"
+       │   "teamId": "uuid",
+       │   "clubId": "uuid"   (opcional)
+       │ }
+       │
+       │ Body (PUT):
+       │ {
+       │   "name": "Alisson",
+       │   "canonicalName": "Alisson",
+       │   "albumCode": "BRA-2",
+       │   "inAlbum": true,
+       │   "calledUp": true,
+       │   "clubId": "uuid"   (opcional)
        │ }
        │
        ▼
@@ -379,6 +391,8 @@
 │  │  - GetAllTeamsUseCase                │  │
 │  │  - GetTeamByIdUseCase                │  │
 │  │  - GetAllPlayersUseCase              │  │
+│  │  - UpdatePlayerClubUseCase           │  │
+│  │  - GetAllClubsUseCase                │  │
 │  │  - GetClubRankingUseCase             │  │
 │  │  - GetOverallStatisticsUseCase       │  │
 │  │  - UploadTeamBadgeUseCase (S3)       │  │

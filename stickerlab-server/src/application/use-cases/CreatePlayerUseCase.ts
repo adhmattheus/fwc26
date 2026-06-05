@@ -7,6 +7,7 @@ interface CreatePlayerInput {
   inAlbum: boolean;
   calledUp: boolean;
   teamId: string;
+  clubId?: string | null;
 }
 
 export class CreatePlayerUseCase {
@@ -16,6 +17,7 @@ export class CreatePlayerUseCase {
     return this.playerRepository.create({
       ...input,
       albumCode: input.albumCode ?? null,
+      clubId: input.clubId ?? null,
     });
   }
 }

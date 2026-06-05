@@ -7,10 +7,13 @@ export interface IPlayerRepository {
     onlyInAlbum: number;
     calledUpWithoutSticker: number;
   }>;
-  create(data: Omit<Player, "id" | "createdAt" | "updatedAt">): Promise<Player>;
+  create(
+    data: Omit<Player, "id" | "createdAt" | "updatedAt" | "club">,
+  ): Promise<Player>;
   update(
     id: string,
-    data: Partial<Omit<Player, "id" | "createdAt" | "updatedAt">>,
+    data: Partial<Omit<Player, "id" | "createdAt" | "updatedAt" | "club">>,
   ): Promise<Player>;
   delete(id: string): Promise<void>;
+  updateClub(id: string, clubId: string): Promise<Player>;
 }

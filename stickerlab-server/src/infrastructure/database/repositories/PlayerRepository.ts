@@ -7,27 +7,37 @@ export class PlayerRepository implements IPlayerRepository {
     return prisma.player.findMany({
       where: { teamId },
       orderBy: [{ inAlbum: "desc" }, { albumCode: "asc" }],
+      include: { club: true },
     });
   }
 
   async create(
-    data: Omit<Player, "id" | "createdAt" | "updatedAt">,
+    data: Omit<Player, "id" | "createdAt" | "updatedAt" | "club">,
   ): Promise<Player> {
     return prisma.player.create({ data });
   }
 
   async update(
     id: string,
-    data: Partial<Omit<Player, "id" | "createdAt" | "updatedAt">>,
+    data: Partial<Omit<Player, "id" | "createdAt" | "updatedAt" | "club">>,
   ): Promise<Player> {
     return prisma.player.update({
       where: { id },
       data,
+      include: { club: true },
     });
   }
 
   async delete(id: string): Promise<void> {
     await prisma.player.delete({ where: { id } });
+  }
+
+  async updateClub(id: string, clubId: string): Promise<Player> {
+    return prisma.player.update({
+      where: { id },
+      data: { clubId },
+      include: { club: true },
+    });
   }
 
   async countByTeamId(teamId: string) {

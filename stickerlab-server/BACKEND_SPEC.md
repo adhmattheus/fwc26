@@ -5,7 +5,7 @@
 ### Endpoints Implementados
 
 - ✅ **Teams**: GET, POST, PUT, DELETE, Upload Badge
-- ✅ **Players**: GET, POST, PUT, DELETE
+- ✅ **Players**: GET, POST, PUT, DELETE, PATCH (assign club)
 - ✅ **Groups**: GET
 - ✅ **Statistics**: GET overall, GET ranking
 - ✅ **Clubs**: GET all, GET ranking
@@ -96,6 +96,14 @@
   "canonical_name": "Alisson",
   "album_code": "BRA-2",
   "team_id": "uuid-brasil",
+  "club_id": "uuid-liverpool",
+  "club": {
+    "id": "uuid-liverpool",
+    "name": "Liverpool",
+    "slug": "liverpool",
+    "countryCode": "ENG",
+    "badgeUrl": "https://cdn.cloudfront.net/clubs-badges/liverpool.png"
+  },
   "in_album": true,
   "called_up": true,
   "created_at": "2024-01-01T00:00:00Z",
@@ -110,6 +118,7 @@
 - `canonical_name`: String (nome normalizado)
 - `album_code`: String (nullable, código figurinha ex: "BRA-2")
 - `team_id`: UUID (FK → Team)
+- `club_id`: UUID (FK → Club, nullable)
 - `in_album`: Boolean (está no álbum Panini?)
 - `called_up`: Boolean (foi convocado?)
 - `created_at`: Timestamp
@@ -238,13 +247,13 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
 
 ### **Players**
 
-| Método | Endpoint           | Descrição                              |
-| ------ | ------------------ | -------------------------------------- |
-| GET    | `/api/players`     | Lista todos os jogadores (com filtros) |
-| GET    | `/api/players/:id` | Busca jogador por ID                   |
-| POST   | `/api/players`     | Cria novo jogador                      |
-| PUT    | `/api/players/:id` | Atualiza jogador                       |
-| DELETE | `/api/players/:id` | Remove jogador                         |
+| Método | Endpoint                | Descrição                                     |
+| ------ | ----------------------- | --------------------------------------------- |
+| GET    | `/api/players`          | Lista todos os jogadores (com filtros)        |
+| POST   | `/api/players`          | Cria novo jogador (`clubId` opcional)         |
+| PUT    | `/api/players/:id`      | Atualiza jogador (inclui `clubId` opcional)   |
+| DELETE | `/api/players/:id`      | Remove jogador                                |
+| PATCH  | `/api/players/:id/club` | Associa um clube ao jogador (apenas `clubId`) |
 
 **Query Params `/api/players`:**
 
@@ -604,6 +613,7 @@ CREATE TABLE players (
   canonical_name VARCHAR(200) NOT NULL,
   album_code VARCHAR(10),
   team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+  club_id UUID REFERENCES clubs(id) ON DELETE SET NULL,
   in_album BOOLEAN DEFAULT FALSE,
   called_up BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -864,9 +874,12 @@ async function seed() {
 - `/api/teams` (GET, POST, PUT, DELETE)
 - `/api/teams/:id` (GET com estatísticas)
 - `/api/players` (GET, POST, PUT, DELETE)
+- `/api/players/:id/club` (PATCH — associa clube)
 - `/api/groups` (GET)
 - `/api/statistics/overall` (GET)
 - `/api/statistics/ranking` (GET)
+- `/api/clubs` (GET)
+- `/api/clubs/ranking` (GET)
 - `/api/auth/login|refresh|logout` (POST)
 - `/api/teams/:id/upload-badge` (POST)
 
