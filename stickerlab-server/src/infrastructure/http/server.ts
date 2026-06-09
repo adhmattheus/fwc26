@@ -8,6 +8,17 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
   : ["http://localhost:3000"];
 
 const server = http.createServer((req, res) => {
+  const start = Date.now();
+  const method = (req.method || "GET").padEnd(6);
+  const url = req.url || "/";
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    const status = res.statusCode;
+    const color = status >= 500 ? "\x1b[31m" : status >= 400 ? "\x1b[33m" : "\x1b[32m";
+    console.log(`${color}${method}\x1b[0m ${url.padEnd(40)} ${status}  ${duration}ms`);
+  });
+
   const origin = req.headers.origin || "";
 
   if (ALLOWED_ORIGINS.includes(origin)) {
