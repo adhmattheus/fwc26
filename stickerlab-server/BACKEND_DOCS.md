@@ -30,7 +30,7 @@ src/infrastructure/http/server.ts
 
 - Cria o servidor HTTP nativo do Node.js
 - Define a porta `3001` onde a API fica disponível
-- Configura o CORS (permite que o front-end acesse a API)
+- Configura o CORS (restringe acesso às origens definidas em `ALLOWED_ORIGINS`)
 - Recebe **todas** as requisições que chegam e passa para o router
 
 > **Em termos simples:** o `server.ts` é como a recepção de um prédio. Toda pessoa (requisição) que chega passa primeiro pela recepção, que verifica se pode entrar (CORS) e direciona para o andar certo (router).
@@ -274,16 +274,26 @@ Para cada seleção, os jogadores são divididos em grupos e as métricas calcul
 ## 10. Variáveis de Ambiente (.env)
 
 ```env
-DATABASE_URL="postgresql://StickerLab:StickerLabpass@localhost:5432/StickerLabdb"
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/stickerlabdb"
 
+# Docker Compose
+POSTGRES_USER=stickerlab
+POSTGRES_PASSWORD=sua-senha-aqui
+POSTGRES_DB=stickerlabdb
+
+# AWS S3
 AWS_ACCESS_KEY_ID=sua-access-key
 AWS_SECRET_ACCESS_KEY=sua-secret-key
 AWS_REGION=us-east-1
-AWS_S3_BUCKET=StickerLab-team-badges
-CLOUDFRONT_URL=https://dvcammctw5or7.cloudfront.net
+AWS_S3_BUCKET=nome-do-seu-bucket
+CLOUDFRONT_URL=https://sua-distribuicao.cloudfront.net
+
+# Servidor
+PORT=3001
+ALLOWED_ORIGINS=http://localhost:3000,https://seu-dominio.com
 ```
 
-> ⚠️ O arquivo `.env` nunca deve ser commitado no Git.
+> ⚠️ O arquivo `.env` nunca deve ser commitado no Git. Use o `.env.example` como base.
 
 ---
 

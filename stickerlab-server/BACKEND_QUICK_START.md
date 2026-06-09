@@ -75,12 +75,16 @@ GET    /api/clubs/ranking
   npm install dotenv
   npm install cors helmet
   ```
-- [ ] Configurar `.env`:
+- [ ] Configurar `.env` (use `.env.example` como base):
   ```env
-  DATABASE_URL=postgresql://...
-  JWT_SECRET=...
-  AWS_S3_BUCKET=...
-  AWS_ACCESS_KEY_ID=...
+  DATABASE_URL=postgresql://usuario:senha@localhost:5432/stickerlabdb
+  POSTGRES_USER=stickerlab
+  POSTGRES_PASSWORD=sua-senha-aqui
+  POSTGRES_DB=stickerlabdb
+  AWS_ACCESS_KEY_ID=sua-access-key
+  AWS_SECRET_ACCESS_KEY=sua-secret-key
+  AWS_S3_BUCKET=nome-do-seu-bucket
+  ALLOWED_ORIGINS=http://localhost:3000
   ```
 - [ ] Setup PostgreSQL (local ou cloud)
 

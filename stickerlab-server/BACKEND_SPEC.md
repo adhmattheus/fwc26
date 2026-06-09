@@ -793,16 +793,29 @@ ORDER BY panini_accuracy_rate DESC;
 ### Exemplo .env
 
 ```
-DATABASE_URL=postgresql://user:pass@host:5432/stickerlab
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/stickerlabdb
+
+# Docker Compose
+POSTGRES_USER=stickerlab
+POSTGRES_PASSWORD=sua-senha-aqui
+POSTGRES_DB=stickerlabdb
+
+# AWS S3
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=nome-do-seu-bucket
+CLOUDFRONT_URL=https://sua-distribuicao.cloudfront.net
+AWS_ACCESS_KEY_ID=sua-access-key
+AWS_SECRET_ACCESS_KEY=sua-secret-key
+
+# Servidor
+PORT=3001
+ALLOWED_ORIGINS=http://localhost:3000,https://seu-dominio.com
+
+# Auth (implementação futura)
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=15m
 REFRESH_TOKEN_SECRET=your-refresh-secret
 REFRESH_TOKEN_EXPIRES_IN=7d
-AWS_REGION=us-east-1
-AWS_S3_BUCKET=stickerlab-album
-AWS_CLOUDFRONT_URL=https://d123.cloudfront.net
-AWS_ACCESS_KEY_ID=AKIA...
-AWS_SECRET_ACCESS_KEY=...
 ```
 
 ---
