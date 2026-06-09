@@ -37,7 +37,7 @@ export default async function TeamPage({ params }: PageProps) {
         }}
       />
 
-      <div className="container mx-auto px-4 max-w-5xl">
+      <div className="container mx-auto px-4 ">
         <div className="py-4">
           <Button
             variant="ghost"

@@ -8,8 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SIZES } from "@/lib/constants";
 import type { PlayerResponse } from "@/services/teams.service";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 interface PlayerCardProps {
@@ -39,6 +41,29 @@ export function PlayerCard({
             </span>
           )}
           <span className="text-sm text-foreground flex-1">{player.name}</span>
+
+          <div className="flex items-center gap-2">
+            {player?.club?.badgeUrl && (
+              <div
+                className="relative shrink-0"
+                style={{
+                  width: SIZES.BADGE.SMALL.width * 4,
+                  height: SIZES.BADGE.SMALL.height * 4,
+                }}
+              >
+                <Image
+                  src={player.club.badgeUrl}
+                  alt={`${player.club.name} badge`}
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+            )}
+            <span className="text-xs text-muted-foreground">
+              {player?.club?.name}
+            </span>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger className="text-muted-foreground hover:text-foreground">
               <MoreHorizontal className="h-4 w-4 cursor-pointer" />

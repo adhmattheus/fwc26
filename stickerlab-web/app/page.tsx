@@ -26,7 +26,7 @@ export default async function HomePage() {
         <StatusLegend />
         {groups && <GroupsGrid groups={groups} />}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+        <div className="grid gap-6 mb-12">
           {ranking && <RankingTable ranking={ranking} />}
           {clubsRanking && <ClubsRankingTable ranking={clubsRanking} />}
         </div>

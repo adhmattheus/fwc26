@@ -29,6 +29,7 @@ import { useClubs } from "@/hooks/useClubs";
 import { useAssignPlayerClub } from "@/hooks/usePlayers";
 import type { PlayerResponse } from "@/services/teams.service";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -118,7 +119,19 @@ export function PlayerAssignClubDialog({
                       ) : (
                         clubs.map((club) => (
                           <SelectItem key={club.id} value={club.id}>
-                            {club.name}
+                            <div className="flex items-center gap-2">
+                              {club.badgeUrl && (
+                                <Image
+                                  src={club.badgeUrl}
+                                  alt={`${club.name} badge`}
+                                  width={16}
+                                  height={16}
+                                  className="object-contain shrink-0"
+                                  unoptimized
+                                />
+                              )}
+                              <span>{club.name}</span>
+                            </div>
                           </SelectItem>
                         ))
                       )}
