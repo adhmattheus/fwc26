@@ -139,27 +139,9 @@ Foi minha forma de aprender novas tecnologias enquanto testava o quão eficiente
 
 ---
 
-## O Propósito: Uma API Pública
-
-Além de responder minha curiosidade pessoal, o StickerLab foi pensado para ser uma **API pública**, disponibilizando esses dados estruturados para qualquer pessoa ou projeto que queira usar.
-
-Outros **entusiastas do futebol e desenvolvedores** terão acesso a boa parte desse trabalho, podendo criar suas próprias análises, dashboards, visualizações ou até novos projetos em cima dessa base de dados.
-
-### Casos de Uso
-
-- Análises estatísticas personalizadas
-- Dashboards visuais
-- Integrações com outros sistemas
-- Estudos sobre padrões de convocação
-- Comparações históricas (em futuras versões)
-
----
-
 ## Conclusão: O Futuro Já Chegou
 
 Este projeto me fez perceber algo importante: **não estamos apenas surfando uma onda nova. O futuro já chegou, e precisamos nos reinventar a cada dia.**
-
-A questão não é "vou ser substituído?", mas sim **"como posso usar essas ferramentas para entregar mais valor e me tornar mais relevante?"**.
 
 O desenvolvedor moderno não é aquele que apenas escreve código, mas aquele que:
 
@@ -168,8 +150,6 @@ O desenvolvedor moderno não é aquele que apenas escreve código, mas aquele qu
 - **Utiliza ferramentas** de forma inteligente para otimizar processos
 - **Compartilha conhecimento** com a comunidade
 - **Adapta-se rapidamente** às mudanças do mercado
-
-Não tenho medo de ser substituído. Minha visão é que os **agents de IA são ferramentas que me ajudam a ser um profissional indispensável**. Quem dominar essas tecnologias hoje estará à frente amanhã.
 
 Como profissional acredito que os melhores projetos nascem da interseção entre paixão pessoal e quando você resolve problemas que realmente te intrigam - mesmo que sejam "apenas" sobre figurinhas.
 

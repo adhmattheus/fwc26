@@ -14,7 +14,7 @@ export function ClubsRankingTable({ ranking }: ClubsRankingTableProps) {
         ⚽ Clubs Ranking
       </h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Clubs ranked by called-up players
+        Clubs ranked by players called up and in the album
       </p>
       <div className="overflow-x-auto">
         <table className="w-full">

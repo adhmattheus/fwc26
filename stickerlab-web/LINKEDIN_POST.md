@@ -33,13 +33,9 @@ Essas perguntas refletem o mundo real do desenvolvimento: **identificar problema
 
 Desde a extração e estruturação dos dados, comparação das informações, criação das análises estatísticas, modelagem do banco de dados, desenvolvimento do backend e frontend, até a documentação completa - cada etapa foi desenvolvida por mim com o suporte de agents para otimizar o processo.
 
-**O propósito:** além de responder minha curiosidade, o StickerLab foi pensado para ser uma **API pública**, disponibilizando esses dados estruturados para qualquer pessoa ou projeto que queira usar. Outros entusiastas do futebol e desenvolvedores terão acesso a boa parte desse trabalho, podendo criar suas próprias análises, dashboards ou até novos projetos em cima dessa base de dados.
-
 **O mais impressionante?** Não foi só a velocidade (um projeto que levaria semanas ficou pronto em dias), mas a qualidade: informações precisas, código consistente e estável. Essa abordagem acelerou cada etapa mantendo qualidade técnica e concisão. Foi minha forma de aprender novas tecnologias enquanto testava o quão eficiente e robusto pode ser o desenvolvimento moderno.
 
 **Reflexão:** Este projeto me fez perceber algo importante - não estamos apenas surfando uma onda nova. O futuro já chegou, e precisamos nos reinventar a cada dia.
-
-A questão não é "vou ser substituído?", mas sim "como posso usar essas ferramentas para entregar mais valor e me tornar mais relevante?". Não tenho medo de ser substituído. Minha visão é que os **agents de IA são ferramentas que me ajudam a ser um profissional indispensável**. Quem dominar essas tecnologias hoje estará à frente amanhã.
 
 🎯 **O projeto está completo, open source e disponível agora no GitHub!**
 
@@ -99,7 +95,7 @@ No dia da postagem, adicione também:
 - ✅ Dados surpreendentes (números inesperados)
 - ✅ Perguntar opinião (gera comentários)
 - ✅ Mencionar IA + Copa (trending topics)
-- ✅ Open source + API pública (valor para comunidade)
+- ✅ Open source (valor para comunidade)
 
 **AUMENTAR ALCANCE APÓS POSTAR:**
 

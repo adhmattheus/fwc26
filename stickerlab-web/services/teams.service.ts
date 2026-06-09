@@ -1,5 +1,6 @@
 import { api } from "./api";
 import { ClubResponse } from "./clubs.service";
+import type { MostRepresentedClub } from "./statistics.service";
 
 export interface TeamResponse {
   id: string;
@@ -42,6 +43,7 @@ export interface TeamDetailResponse {
   statistics: {
     paniniAccuracyRate: number;
     errorRate: number;
+    mostRepresentedClub: MostRepresentedClub | null;
   };
 }
 

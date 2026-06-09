@@ -80,7 +80,7 @@ export default async function TeamPage({ params }: PageProps) {
           <h2 className="text-lg font-bold text-foreground mb-4">
             📊 Team Statistics
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <StatisticCard
               value={statistics.paniniAccuracyRate}
               label="StickerLab Accuracy"
@@ -93,6 +93,15 @@ export default async function TeamPage({ params }: PageProps) {
               label="Error Rate"
               description={`${comparison.onlyInAlbum.total}/${comparison.inAlbumAndCalledUp.total + comparison.onlyInAlbum.total} not called up`}
             />
+
+            {statistics.mostRepresentedClub && (
+              <StatisticCard
+                value={statistics.mostRepresentedClub.percentage}
+                label="Most Represented Club"
+                description={`${statistics.mostRepresentedClub.club} • ${statistics.mostRepresentedClub.playerCount}/${statistics.mostRepresentedClub.totalPlayers} players called up and in album`}
+                showBadge
+              />
+            )}
           </div>
         </section>
 
