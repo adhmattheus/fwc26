@@ -11,9 +11,45 @@
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.2-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
   
   [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js)](https://nodejs.org/)
-  [![Fastify](https://img.shields.io/badge/Fastify-5-000000?logo=fastify)](https://www.fastify.io/)
   [![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)](https://www.prisma.io/)
   [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql)](https://www.postgresql.org/)
+</div>
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+
+### Overall Statistics & Groups
+
+![Overall Statistics](docs/screenshots/screenshots1.png)
+
+![Groups Grid](docs/screenshots/screenshots2.png)
+
+### Rankings
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/screenshots4.png" alt="Accuracy Ranking" /></td>
+    <td><img src="docs/screenshots/screenshots5.png" alt="Clubs Ranking" /></td>
+  </tr>
+  <tr>
+    <td align="center"><em>StickerLab Accuracy Ranking</em></td>
+    <td align="center"><em>Clubs Ranking</em></td>
+  </tr>
+</table>
+
+### Team Detail
+
+![Team Detail](docs/screenshots/screenshots6.png)
+
+![Team Players](docs/screenshots/screenshots7.png)
+
+### Mobile
+
+<img src="docs/screenshots/sreenshots8.png" alt="Mobile View" width="360" />
+
 </div>
 
 ---
@@ -48,8 +84,7 @@ StickerLab compares players featured in sticker albums with those actually calle
 
 ### Backend
 
-- **Runtime**: [Node.js](https://nodejs.org/)
-- **Framework**: [Fastify 5](https://www.fastify.io/)
+- **Runtime**: [Node.js](https://nodejs.org/) (HTTP nativo)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Database**: [PostgreSQL 17](https://www.postgresql.org/)
 - **ORM**: [Prisma 6](https://www.prisma.io/)

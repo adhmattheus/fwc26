@@ -42,39 +42,43 @@ export function PlayerCard({
           )}
           <span className="text-sm text-foreground flex-1">{player.name}</span>
 
-          <div className="flex items-center gap-2">
-            {player?.club?.badgeUrl && (
-              <div
-                className="relative shrink-0"
-                style={{
-                  width: SIZES.BADGE.SMALL.width * 4,
-                  height: SIZES.BADGE.SMALL.height * 4,
-                }}
-              >
-                <Image
-                  src={player.club.badgeUrl}
-                  alt={`${player.club.name} badge`}
-                  fill
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
-            )}
-            <span className="text-xs text-muted-foreground">
-              {player?.club?.name}
-            </span>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="text-muted-foreground hover:text-foreground">
-              <MoreHorizontal className="h-4 w-4 cursor-pointer" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setDialogOpen(true)}>
-                <PlusCircle className="h-4 w-4" />
-                Adicionar clube
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {player.club && (
+            <div className="flex items-center gap-2">
+              {player.club.badgeUrl && (
+                <div
+                  className="relative shrink-0"
+                  style={{
+                    width: SIZES.BADGE.SMALL.width * 4,
+                    height: SIZES.BADGE.SMALL.height * 4,
+                  }}
+                >
+                  <Image
+                    src={player.club.badgeUrl}
+                    alt={`${player.club.name} badge`}
+                    fill
+                    className="object-contain"
+                    unoptimized
+                  />
+                </div>
+              )}
+              <span className="text-xs text-muted-foreground">
+                {player.club.name}
+              </span>
+            </div>
+          )}
+          {!player.clubId && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-muted-foreground hover:text-foreground">
+                <MoreHorizontal className="h-4 w-4 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setDialogOpen(true)}>
+                  <PlusCircle className="h-4 w-4" />
+                  Adicionar clube
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </CardContent>
       </Card>
 

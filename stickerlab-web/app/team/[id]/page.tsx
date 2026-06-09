@@ -37,7 +37,7 @@ export default async function TeamPage({ params }: PageProps) {
         }}
       />
 
-      <div className="container mx-auto px-4 ">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="py-4">
           <Button
             variant="ghost"
@@ -105,7 +105,7 @@ export default async function TeamPage({ params }: PageProps) {
           </div>
         </section>
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8">
           <div className="text-center p-4 rounded-xl bg-status-success/10 border border-status-success/20">
             <p className="text-3xl font-bold text-status-success">
               {comparison.inAlbumAndCalledUp.total}

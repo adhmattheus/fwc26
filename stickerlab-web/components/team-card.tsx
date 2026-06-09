@@ -9,7 +9,7 @@ import { getTeamColors, hasTeamData } from "@/lib/team";
 import { cn } from "@/lib/utils";
 import type { TeamInGroup } from "@/services/groups.service";
 import Link from "next/link";
-import React from "react";
+import { memo } from "react";
 
 interface TeamCardProps {
   team: TeamInGroup;
@@ -22,7 +22,7 @@ function TeamCardComponent({ team }: TeamCardProps) {
   const cardContent = (
     <Card
       className={cn(
-        "h-full overflow-hidden transition-all duration-200 group",
+        "p-0 gap-0 h-full overflow-hidden transition-all duration-200 group",
         "hover:shadow-lg hover:-translate-y-0.5 cursor-pointer",
       )}
     >
@@ -35,8 +35,8 @@ function TeamCardComponent({ team }: TeamCardProps) {
         <TeamBadge team={team} size="medium" />
       </div>
 
-      <CardContent className="p-3 pt-2">
-        <h3 className="font-semibold text-sm leading-tight text-foreground mb-2 line-clamp-1">
+      <CardContent className="p-3">
+        <h3 className="font-semibold text-sm leading-tight text-foreground mb-2 min-h-10">
           {team.name}
         </h3>
 
@@ -72,4 +72,4 @@ function TeamCardComponent({ team }: TeamCardProps) {
   );
 }
 
-export const TeamCard = React.memo(TeamCardComponent);
+export const TeamCard = memo(TeamCardComponent);

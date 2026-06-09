@@ -20,13 +20,13 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 sm:px-6">
         <PageHeader />
         {overallStats && <OverallStatistics stats={overallStats} />}
         <StatusLegend />
         {groups && <GroupsGrid groups={groups} />}
 
-        <div className="grid gap-6 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {ranking && <RankingTable ranking={ranking} />}
           {clubsRanking && <ClubsRankingTable ranking={clubsRanking} />}
         </div>
