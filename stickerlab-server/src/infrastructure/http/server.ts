@@ -36,7 +36,11 @@ const server = http.createServer((req, res) => {
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("X-XSS-Protection", "1; mode=block");
   res.setHeader("Strict-Transport-Security", "max-age=31536000");
-  res.setHeader("Content-Security-Policy", "default-src 'self'");
+
+  // CSP não é aplicado na rota de docs pois o Swagger UI usa scripts inline
+  if (!url.startsWith("/api/docs")) {
+    res.setHeader("Content-Security-Policy", "default-src 'self'");
+  }
 
   if (req.method === "OPTIONS") {
     res.writeHead(204);
