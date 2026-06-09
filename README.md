@@ -23,16 +23,16 @@
 
 ### Overall Statistics & Groups
 
-![Overall Statistics](docs/screenshots/screenshots1.png)
+![Overall Statistics](stickerlab-web/docs/screenshots/screenshots1.png)
 
-![Groups Grid](docs/screenshots/screenshots2.png)
+![Groups Grid](stickerlab-web/docs/screenshots/screenshots2.png)
 
 ### Rankings
 
 <table>
   <tr>
-    <td><img src="docs/screenshots/screenshots4.png" alt="Accuracy Ranking" /></td>
-    <td><img src="docs/screenshots/screenshots5.png" alt="Clubs Ranking" /></td>
+    <td><img src="stickerlab-web/docs/screenshots/screenshots4.png" alt="Accuracy Ranking" /></td>
+    <td><img src="stickerlab-web/docs/screenshots/screenshots5.png" alt="Clubs Ranking" /></td>
   </tr>
   <tr>
     <td align="center"><em>StickerLab Accuracy Ranking</em></td>
@@ -42,13 +42,13 @@
 
 ### Team Detail
 
-![Team Detail](docs/screenshots/screenshots6.png)
+![Team Detail](stickerlab-web/docs/screenshots/screenshots6.png)
 
-![Team Players](docs/screenshots/screenshots7.png)
+![Team Players](stickerlab-web/docs/screenshots/screenshots7.png)
 
 ### Mobile
 
-<img src="docs/screenshots/sreenshots8.png" alt="Mobile View" width="360" />
+<img src="stickerlab-web/docs/screenshots/sreenshots8.png" alt="Mobile View" width="360" />
 
 </div>
 
