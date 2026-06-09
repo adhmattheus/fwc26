@@ -42,6 +42,22 @@ export class GetTeamByIdUseCase {
     const errorRate =
       album.length > 0 ? (onlyInAlbum.length / album.length) * 100 : 0;
 
+    const clubCount: Record<string, { club: any; count: number }> = {};
+    for (const p of inAlbumAndCalledUp) {
+      if (!p.club) continue;
+      if (!clubCount[p.club.id]) clubCount[p.club.id] = { club: p.club, count: 0 };
+      clubCount[p.club.id].count++;
+    }
+    const topClubEntry = Object.values(clubCount).sort((a, b) => b.count - a.count)[0] || null;
+    const mostRepresentedClub = topClubEntry
+      ? {
+          club: topClubEntry.club.name,
+          playerCount: topClubEntry.count,
+          totalPlayers: calledUp.length,
+          percentage: Number(((topClubEntry.count / calledUp.length) * 100).toFixed(2)),
+        }
+      : null;
+
     return {
       team,
       players: { album, calledUp },
@@ -62,6 +78,7 @@ export class GetTeamByIdUseCase {
       statistics: {
         paniniAccuracyRate: Number(paniniAccuracyRate.toFixed(2)),
         errorRate: Number(errorRate.toFixed(2)),
+        mostRepresentedClub,
       },
     };
   }

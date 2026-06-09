@@ -101,6 +101,16 @@ const options: swaggerJsdoc.Options = {
           properties: {
             paniniAccuracyRate: { type: "number", example: 72.22 },
             errorRate: { type: "number", example: 27.78 },
+            mostRepresentedClub: {
+              type: "object",
+              nullable: true,
+              properties: {
+                club: { type: "string", example: "Real Madrid" },
+                playerCount: { type: "integer", example: 3 },
+                totalPlayers: { type: "integer", example: 26 },
+                percentage: { type: "number", example: 11.54 },
+              },
+            },
           },
         },
         Error: {
@@ -732,11 +742,11 @@ const options: swaggerJsdoc.Options = {
       },
       "/clubs/ranking": {
         get: {
-          summary: "Clubs ranking by called-up players",
+          summary: "Clubs ranking by called-up players with sticker",
           tags: ["Clubs"],
           responses: {
             200: {
-              description: "Clubs ranking by number of called-up players",
+              description: "Clubs ranking by players who are called-up AND have a sticker in the album. Ordered by playerCount desc, then alphabetically.",
               content: {
                 "application/json": {
                   schema: {

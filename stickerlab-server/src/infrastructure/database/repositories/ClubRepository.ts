@@ -26,22 +26,18 @@ export class ClubRepository implements IClubRepository {
   }
 
   async getRanking(): Promise<ClubRankingItem[]> {
-    // Busca apenas jogadores convocados (called_up = true)
+    // Busca apenas jogadores convocados e com figurinha no álbum
     const result = await prisma.club.findMany({
       include: {
         _count: {
           select: {
             players: {
-              where: { calledUp: true },
+              where: { calledUp: true, inAlbum: true },
             },
           },
         },
       },
-      orderBy: {
-        players: {
-          _count: "desc",
-        },
-      },
+      orderBy: [{ players: { _count: "desc" } }, { name: "asc" }],
     });
 
     return result

@@ -256,7 +256,18 @@ Para cada seleção, os jogadores são divididos em grupos e as métricas calcul
 **Estatísticas Gerais** (endpoint `/api/statistics/overall`):
 
 - Incluem agregados de todas as seleções
-- **Novo campo**: `mostRepresentedClub` - identifica o clube com mais jogadores convocados, sua porcentagem de representação e contagem total
+- Campo `mostRepresentedClub`: identifica o clube com mais jogadores convocados globalmente, sua porcentagem e contagem total
+
+**Estatísticas por Seleção** (endpoint `/api/teams/:id`):
+
+- Campo `mostRepresentedClub` dentro de `statistics`: clube com mais jogadores **convocados e com figurinha** naquela seleção
+- `playerCount`: jogadores desse clube nessa seleção; `totalPlayers`: total de convocados da seleção
+- Pode ser `null` se não houver jogadores convocados com figurinha ainda
+
+**Ranking de Clubes** (endpoint `/api/clubs/ranking`):
+
+- Considera apenas jogadores **convocados e com figurinha no álbum**
+- Em caso de empate no `playerCount`, ordenação alfabética pelo nome do clube
 
 ---
 

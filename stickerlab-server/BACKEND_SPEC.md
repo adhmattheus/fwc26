@@ -238,10 +238,24 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
   },
   "statistics": {
     "paniniAccuracyRate": 72.2,
-    "errorRate": 27.8
+    "errorRate": 27.8,
+    "mostRepresentedClub": {
+      "club": "Real Madrid",
+      "playerCount": 3,
+      "totalPlayers": 26,
+      "percentage": 11.54
+    }
   }
 }
 ```
+
+**Campo `mostRepresentedClub` (team):**
+
+- `club`: Nome do clube mais representado entre os convocados com figurinha do time
+- `playerCount`: Número de jogadores desse clube convocados e com figurinha
+- `totalPlayers`: Total de convocados do time
+- `percentage`: (playerCount / totalPlayers) × 100
+- Pode ser `null` se o time não tiver jogadores convocados com figurinha
 
 ---
 
@@ -434,9 +448,9 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
 
 **Cálculo:**
 
-- `playerCount`: Total de jogadores convocados que jogam no clube
+- `playerCount`: Total de jogadores **convocados e com figurinha no álbum** que jogam no clube
 - `percentage`: (playerCount / 1248 total convocados) × 100
-- Ordenado por `playerCount` (decrescente)
+- Ordenado por `playerCount` (decrescente); em caso de empate, ordem alfabética pelo nome do clube
 
 ---
 
