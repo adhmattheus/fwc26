@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     container_name: stickerlab-db
     environment:
-      POSTGRES_USER: stickerlab
-      POSTGRES_PASSWORD: stickerlabpass
-      POSTGRES_DB: stickerlabdb
+      POSTGRES_USER: ${POSTGRES_USER:-stickerlab}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-stickerlabdb}
     ports:
       - "5432:5432"
     volumes:
