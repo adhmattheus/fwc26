@@ -1,7 +1,7 @@
 import { IUserStickerRepository } from "../../domain/repositories/IUserStickerRepository";
 import { AppError } from "../../shared/errors/AppError";
 
-const ALBUM_CODE_REGEX = /^[A-Z]{2,3}-[1-9][0-9]?$/;
+const ALBUM_CODE_REGEX = /^[A-Z]{2,3}-[0-9][0-9]?$/;
 
 export class ToggleStickerUseCase {
   constructor(private userStickerRepository: IUserStickerRepository) {}

@@ -401,28 +401,38 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
 }
 ```
 
-**Request `POST /api/album/collection/toggle`:**
+**Request singular `POST /api/album/collection/toggle`:**
 
 ```json
-{
-  "albumCode": "BRA-1"
-}
+{ "albumCode": "BRA-1" }
 ```
 
-**Response `POST /api/album/collection/toggle`:**
+**Response singular:**
 
 ```json
-{
-  "albumCode": "BRA-1",
-  "owned": true
-}
+{ "albumCode": "BRA-1", "owned": true }
+```
+`owned: true` = adicionada, `owned: false` = removida (toggle).
+
+---
+
+**Request bulk `POST /api/album/collection/toggle`:**
+
+```json
+{ "albumCodes": ["FWC-00", "FWC-01", "BRA-1", "BRA-5"] }
+```
+
+**Response bulk:**
+
+```json
+{ "albumCodes": ["FWC-00", "FWC-01", "BRA-1", "BRA-5"], "owned": true }
 ```
 
 **Regras:**
 - `userId` é extraído do JWT — nunca do body
-- `albumCode` validado com regex `^[A-Z]{2,3}-[1-9][0-9]?$` (ex: `BRA-1`, `FRA-10`)
-- `owned: true` → figurinha adicionada à coleção
-- `owned: false` → figurinha removida da coleção
+- `albumCode`/`albumCodes` validados com regex `^[A-Z]{2,3}-[0-9][0-9]?$` (ex: `BRA-1`, `FRA-10`, `FWC-00`)
+- **Singular**: toggle — adiciona se não tem, remove se tem
+- **Bulk**: somente adiciona — ignora os que já existem, **nunca remove**. Máximo 50 itens por request
 - Índice único em `(userId, albumCode)` garante sem duplicatas
 
 ---

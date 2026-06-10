@@ -20,6 +20,13 @@ export class UserStickerRepository implements IUserStickerRepository {
     return prisma.userSticker.create({ data: { userId, albumCode } });
   }
 
+  async addManyIfNotOwned(userId: string, albumCodes: string[]): Promise<void> {
+    await prisma.userSticker.createMany({
+      data: albumCodes.map((albumCode) => ({ userId, albumCode })),
+      skipDuplicates: true,
+    });
+  }
+
   async deleteByUserIdAndAlbumCode(
     userId: string,
     albumCode: string,

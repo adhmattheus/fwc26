@@ -52,13 +52,31 @@ const options: swaggerJsdoc.Options = {
         },
         ToggleStickerRequest: {
           type: "object",
+          description: "Singular toggle — mantém comportamento original (add/remove).",
           required: ["albumCode"],
           properties: {
             albumCode: {
               type: "string",
               example: "BRA-1",
-              description: "Código da figurinha no formato XX-N ou XXX-N (ex: BRA-1, FRA-10)",
-              pattern: "^[A-Z]{2,3}-[1-9][0-9]?$",
+              description: "Código da figurinha no formato XX-N ou XXX-N (ex: BRA-1, FRA-10, FWC-00)",
+              pattern: "^[A-Z]{2,3}-[0-9][0-9]?$",
+            },
+          },
+        },
+        BulkAddStickersRequest: {
+          type: "object",
+          description: "Bulk add — adiciona todas as figurinhas do array (ignora as que já existem, nunca remove). Máximo 50 itens.",
+          required: ["albumCodes"],
+          properties: {
+            albumCodes: {
+              type: "array",
+              maxItems: 50,
+              items: {
+                type: "string",
+                pattern: "^[A-Z]{2,3}-[0-9][0-9]?$",
+                example: "BRA-1",
+              },
+              example: ["FWC-00", "FWC-01", "BRA-1", "BRA-5"],
             },
           },
         },
@@ -71,6 +89,17 @@ const options: swaggerJsdoc.Options = {
               example: true,
               description: "true = figurinha adicionada, false = figurinha removida",
             },
+          },
+        },
+        BulkAddStickersResponse: {
+          type: "object",
+          properties: {
+            albumCodes: {
+              type: "array",
+              items: { type: "string" },
+              example: ["FWC-00", "FWC-01", "BRA-1", "BRA-5"],
+            },
+            owned: { type: "boolean", example: true },
           },
         },
         Group: {
@@ -308,29 +337,39 @@ const options: swaggerJsdoc.Options = {
       },
       "/album/collection/toggle": {
         post: {
-          summary: "Toggle sticker ownership",
-          description: "Adiciona a figurinha se o usuário não a possui; remove se já possui. O `userId` é extraído do JWT — nunca do body.",
+          summary: "Toggle sticker / Bulk add stickers",
+          description: "**Singular** (`albumCode`): toggle add/remove — comportamento original.\n\n**Bulk** (`albumCodes`): adiciona todas as figurinhas do array; ignora as que já existem, nunca remove. Máximo 50 itens.\n\nO `userId` é sempre extraído do JWT.",
           tags: ["Album"],
           security: [{ bearerAuth: [] }],
           requestBody: {
             required: true,
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/ToggleStickerRequest" },
+                schema: {
+                  oneOf: [
+                    { $ref: "#/components/schemas/ToggleStickerRequest" },
+                    { $ref: "#/components/schemas/BulkAddStickersRequest" },
+                  ],
+                },
               },
             },
           },
           responses: {
             200: {
-              description: "Estado atualizado da figurinha",
+              description: "Estado atualizado",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/ToggleStickerResponse" },
+                  schema: {
+                    oneOf: [
+                      { $ref: "#/components/schemas/ToggleStickerResponse" },
+                      { $ref: "#/components/schemas/BulkAddStickersResponse" },
+                    ],
+                  },
                 },
               },
             },
             400: {
-              description: "albumCode com formato inválido",
+              description: "albumCode com formato inválido, array vazio ou acima do limite",
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/Error" },
