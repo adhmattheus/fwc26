@@ -1,7 +1,6 @@
 import { ClubsRankingTable } from "@/components/home/clubs-ranking-table";
 import { clubsService } from "@/services/clubs.service";
 
-export const dynamic = "force-dynamic";
 
 export default async function ClubsRankingPage() {
   const clubsRanking = await clubsService.getRanking();

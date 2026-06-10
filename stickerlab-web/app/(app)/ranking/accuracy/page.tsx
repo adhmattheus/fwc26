@@ -1,7 +1,6 @@
 import { RankingTable } from "@/components/home/ranking-table";
 import { statisticsService } from "@/services/statistics.service";
 
-export const dynamic = "force-dynamic";
 
 export default async function AccuracyRankingPage() {
   const ranking = await statisticsService.getRanking();

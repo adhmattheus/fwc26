@@ -1,7 +1,6 @@
 import { AlbumAccordion } from "@/components/album/album-accordion";
 import { groupsService } from "@/services/groups.service";
 
-export const dynamic = "force-dynamic";
 
 export default async function AlbumPage() {
   const groups = await groupsService.getAll();

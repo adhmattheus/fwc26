@@ -5,7 +5,6 @@ import { StatusLegend } from "@/components/home/status-legend";
 import { groupsService } from "@/services/groups.service";
 import { statisticsService } from "@/services/statistics.service";
 
-export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const [groups, overallStats] = await Promise.all([
