@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { PlayerController } from "../controllers/PlayerController";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 const controller = new PlayerController();
 
@@ -14,12 +15,20 @@ export async function playerRoutes(req: IncomingMessage, res: ServerResponse) {
   const clubPlayerId = clubMatch ? clubMatch[1] : null;
 
   if (method === "GET" && !id) return controller.getAll(req, res);
-  if (method === "POST" && !id) return controller.create(req, res);
-  if (method === "PUT" && id) return controller.update(req, res, id);
-  if (method === "DELETE" && id) return controller.delete(req, res, id);
-  if (method === "PATCH" && clubPlayerId)
-    return controller.updateClub(req, res, clubPlayerId);
 
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ message: "Route not found" }));
+  // Rotas protegidas
+  return new Promise<void>((resolve) => {
+    authMiddleware(req, res, async () => {
+      if (method === "POST" && !id) await controller.create(req, res);
+      else if (method === "PUT" && id) await controller.update(req, res, id);
+      else if (method === "DELETE" && id) await controller.delete(req, res, id);
+      else if (method === "PATCH" && clubPlayerId)
+        await controller.updateClub(req, res, clubPlayerId);
+      else {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Route not found" }));
+      }
+      resolve();
+    });
+  });
 }

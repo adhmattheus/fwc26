@@ -16,7 +16,21 @@ const options: swaggerJsdoc.Options = {
       },
     ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
       schemas: {
+        AuthTokens: {
+          type: "object",
+          properties: {
+            accessToken: { type: "string", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+            refreshToken: { type: "string", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+          },
+        },
         Group: {
           type: "object",
           properties: {
@@ -122,6 +136,118 @@ const options: swaggerJsdoc.Options = {
       },
     },
     paths: {
+      "/auth/login": {
+        post: {
+          summary: "Login",
+          tags: ["Auth"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["email", "password"],
+                  properties: {
+                    email: { type: "string", format: "email", example: "admin@stickerlab.com" },
+                    password: { type: "string", example: "password123" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Login successful — returns access and refresh tokens",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/AuthTokens" },
+                },
+              },
+            },
+            401: {
+              description: "Invalid credentials",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/auth/refresh": {
+        post: {
+          summary: "Refresh access token",
+          tags: ["Auth"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["refreshToken"],
+                  properties: {
+                    refreshToken: { type: "string" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "New access and refresh tokens",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/AuthTokens" },
+                },
+              },
+            },
+            401: {
+              description: "Invalid or expired refresh token",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/auth/logout": {
+        post: {
+          summary: "Logout",
+          tags: ["Auth"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["refreshToken"],
+                  properties: {
+                    refreshToken: { type: "string" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Logout successful",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      message: { type: "string", example: "Logout realizado com sucesso" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       "/groups": {
         get: {
           summary: "List all groups",
@@ -162,6 +288,7 @@ const options: swaggerJsdoc.Options = {
         post: {
           summary: "Create a team",
           tags: ["Teams"],
+          security: [{ bearerAuth: [] }],
           requestBody: {
             required: true,
             content: {
@@ -289,6 +416,7 @@ const options: swaggerJsdoc.Options = {
         put: {
           summary: "Update team",
           tags: ["Teams"],
+          security: [{ bearerAuth: [] }],
           parameters: [
             {
               name: "id",
@@ -331,6 +459,7 @@ const options: swaggerJsdoc.Options = {
         delete: {
           summary: "Delete team",
           tags: ["Teams"],
+          security: [{ bearerAuth: [] }],
           parameters: [
             {
               name: "id",
@@ -366,6 +495,7 @@ const options: swaggerJsdoc.Options = {
         post: {
           summary: "Upload team badge",
           tags: ["Teams"],
+          security: [{ bearerAuth: [] }],
           parameters: [
             {
               name: "id",
@@ -449,6 +579,7 @@ const options: swaggerJsdoc.Options = {
         },
         post: {
           summary: "Create player",
+          security: [{ bearerAuth: [] }],
           description:
             "Creates a player. `clubId` is optional — if omitted, use `PATCH /players/{id}/club` to assign a club afterwards.",
           tags: ["Players"],
@@ -502,6 +633,7 @@ const options: swaggerJsdoc.Options = {
       "/players/{id}": {
         put: {
           summary: "Update player",
+          security: [{ bearerAuth: [] }],
           description:
             "Updates player fields. `clubId` can also be set here or via `PATCH /players/{id}/club`.",
           tags: ["Players"],
@@ -558,6 +690,7 @@ const options: swaggerJsdoc.Options = {
         delete: {
           summary: "Delete player",
           tags: ["Players"],
+          security: [{ bearerAuth: [] }],
           parameters: [
             {
               name: "id",
@@ -590,6 +723,7 @@ const options: swaggerJsdoc.Options = {
         patch: {
           summary: "Assign a club to a player",
           tags: ["Players"],
+          security: [{ bearerAuth: [] }],
           parameters: [
             {
               name: "id",

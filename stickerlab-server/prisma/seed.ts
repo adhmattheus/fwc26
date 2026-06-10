@@ -1,5 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import "dotenv/config";
 import { Pool } from "pg";
 
@@ -554,6 +555,20 @@ async function main() {
   }
 
   console.log(`✅ ${allTeams.length} teams created`);
+
+  const hashedPassword = await bcrypt.hash("StickerLab@2026!", 10);
+  await prisma.user.upsert({
+    where: { email: "admin@stickerlab.com" },
+    update: {},
+    create: {
+      email: "admin@stickerlab.com",
+      password: hashedPassword,
+      name: "Admin",
+      role: "admin",
+    },
+  });
+
+  console.log("✅ Admin user created");
   console.log("🎉 Seed completed!");
 }
 

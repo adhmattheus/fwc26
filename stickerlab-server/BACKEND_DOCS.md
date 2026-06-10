@@ -64,18 +64,24 @@ src/
 │   ├── entities/                    # Estruturas de dados
 │   │   ├── Group.ts
 │   │   ├── Team.ts
-│   │   └── Player.ts
+│   │   ├── Player.ts
+│   │   ├── Club.ts
+│   │   ├── User.ts
+│   │   └── RefreshToken.ts
 │   └── repositories/                # Contratos (interfaces)
 │       ├── IGroupRepository.ts
 │       ├── ITeamRepository.ts
 │       ├── IPlayerRepository.ts
+│       ├── IClubRepository.ts
+│       ├── IUserRepository.ts
+│       ├── IRefreshTokenRepository.ts
 │       └── IStorageService.ts
 │
 ├── application/                     # Camada 2 — Os casos de uso
 │   └── use-cases/
 │       ├── GetAllGroupsUseCase.ts
 │       ├── GetAllTeamsUseCase.ts
-│       ├── GetTeamBySlugUseCase.ts
+│       ├── GetTeamByIdUseCase.ts
 │       ├── GetAllPlayersUseCase.ts
 │       ├── GetOverallStatisticsUseCase.ts
 │       ├── GetRankingUseCase.ts
@@ -88,35 +94,49 @@ src/
 │       ├── DeletePlayerUseCase.ts
 │       ├── GetAllClubsUseCase.ts
 │       ├── GetClubRankingUseCase.ts
-│       └── UploadTeamBadgeUseCase.ts
+│       ├── UploadTeamBadgeUseCase.ts
+│       ├── LoginUseCase.ts
+│       ├── RefreshTokenUseCase.ts
+│       └── LogoutUseCase.ts
 │
 ├── infrastructure/                  # Camada 3 — O mundo real
+│   ├── auth/
+│   │   └── JwtService.ts            # Geração e validação de tokens JWT
 │   ├── database/
 │   │   ├── prismaClient.ts          # Instância única do Prisma (Singleton)
 │   │   └── repositories/
 │   │       ├── GroupRepository.ts
 │   │       ├── TeamRepository.ts
-│   │       └── PlayerRepository.ts
+│   │       ├── PlayerRepository.ts
+│   │       ├── ClubRepository.ts
+│   │       ├── UserRepository.ts
+│   │       └── RefreshTokenRepository.ts
 │   ├── storage/
 │   │   └── S3Service.ts             # Upload no AWS S3
 │   └── http/
-│       ├── server.ts                # Servidor HTTP
+│       ├── server.ts                # Servidor HTTP + CORS + security headers
 │       ├── router.ts                # Distribuidor central de rotas
 │       ├── routes/
+│       │   ├── authRoutes.ts
 │       │   ├── groupRoutes.ts
 │       │   ├── teamRoutes.ts
 │       │   ├── playerRoutes.ts
+│       │   ├── clubRoutes.ts
 │       │   └── statisticsRoutes.ts
 │       ├── controllers/
+│       │   ├── AuthController.ts
 │       │   ├── GroupController.ts
 │       │   ├── TeamController.ts
 │       │   ├── PlayerController.ts
+│       │   ├── ClubController.ts
 │       │   └── StatisticsController.ts
+│       ├── middlewares/
+│       │   └── authMiddleware.ts    # Valida Bearer token nas rotas privadas
 │       ├── helpers/
 │       │   ├── httpResponse.ts      # Centraliza envio de respostas JSON
 │       │   └── parseBody.ts         # Lê o body das requisições
 │       └── docs/
-│           └── swagger.ts           # Documentação Swagger
+│           └── swagger.ts           # Documentação Swagger / OpenAPI
 │
 └── shared/                          # Camada 4 — Compartilhado
     └── errors/
@@ -194,53 +214,63 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 
 ## 7. Endpoints Disponíveis
 
+> Legenda: 🌐 **Pública** — sem autenticação | 🔒 **Privada** — requer `Authorization: Bearer <accessToken>`
+
+### Auth
+
+| Acesso | Método | URL                  | Descrição                                         |
+| ------ | ------ | -------------------- | ------------------------------------------------- |
+| 🌐     | POST   | `/api/auth/login`    | Autentica usuário e retorna access + refresh token |
+| 🌐     | POST   | `/api/auth/refresh`  | Troca o refresh token por novos tokens            |
+| 🌐     | POST   | `/api/auth/logout`   | Invalida o refresh token                          |
+
 ### Groups
 
-| Método | URL           | Descrição                       |
-| ------ | ------------- | ------------------------------- |
-| GET    | `/api/groups` | Lista todos os grupos (A até L) |
+| Acesso | Método | URL           | Descrição                       |
+| ------ | ------ | ------------- | ------------------------------- |
+| 🌐     | GET    | `/api/groups` | Lista todos os grupos (A até L) |
 
 ### Teams
 
-| Método | URL                           | Descrição                                  |
-| ------ | ----------------------------- | ------------------------------------------ |
-| GET    | `/api/teams`                  | Lista todas as seleções                    |
-| GET    | `/api/teams/:id`              | Busca seleção com jogadores e estatísticas |
-| POST   | `/api/teams`                  | Cria uma nova seleção                      |
-| PUT    | `/api/teams/:id`              | Atualiza dados de uma seleção              |
-| DELETE | `/api/teams/:id`              | Remove uma seleção                         |
-| POST   | `/api/teams/:id/upload-badge` | Faz upload do badge no S3                  |
+| Acesso | Método | URL                           | Descrição                                  |
+| ------ | ------ | ----------------------------- | ------------------------------------------ |
+| 🌐     | GET    | `/api/teams`                  | Lista todas as seleções                    |
+| 🌐     | GET    | `/api/teams/:id`              | Busca seleção com jogadores e estatísticas |
+| 🔒     | POST   | `/api/teams`                  | Cria uma nova seleção                      |
+| 🔒     | PUT    | `/api/teams/:id`              | Atualiza dados de uma seleção              |
+| 🔒     | DELETE | `/api/teams/:id`              | Remove uma seleção                         |
+| 🔒     | POST   | `/api/teams/:id/upload-badge` | Faz upload do badge no S3                  |
 
 ### Players
 
-| Método | URL                     | Descrição                      |
-| ------ | ----------------------- | ------------------------------ |
-| GET    | `/api/players?team_id=` | Lista jogadores de uma seleção |
-| POST   | `/api/players`          | Cria um novo jogador           |
-| PUT    | `/api/players/:id`      | Atualiza dados de um jogador   |
-| DELETE | `/api/players/:id`      | Remove um jogador              |
-| PATCH  | `/api/players/:id/club` | Associa um clube a um jogador  |
+| Acesso | Método | URL                        | Descrição                      |
+| ------ | ------ | -------------------------- | ------------------------------ |
+| 🌐     | GET    | `/api/players?team_id=:id` | Lista jogadores de uma seleção |
+| 🔒     | POST   | `/api/players`             | Cria um novo jogador           |
+| 🔒     | PUT    | `/api/players/:id`         | Atualiza dados de um jogador   |
+| 🔒     | DELETE | `/api/players/:id`         | Remove um jogador              |
+| 🔒     | PATCH  | `/api/players/:id/club`    | Associa um clube a um jogador  |
 
 ### Statistics
 
-| Método | URL                       | Descrição                                                          |
-| ------ | ------------------------- | ------------------------------------------------------------------ |
-| GET    | `/api/statistics/overall` | Estatísticas gerais de todas as seleções + clube mais representado |
-| GET    | `/api/statistics/ranking` | Ranking de seleções por taxa de acerto Panini                      |
+| Acesso | Método | URL                       | Descrição                                                          |
+| ------ | ------ | ------------------------- | ------------------------------------------------------------------ |
+| 🌐     | GET    | `/api/statistics/overall` | Estatísticas gerais de todas as seleções + clube mais representado |
+| 🌐     | GET    | `/api/statistics/ranking` | Ranking de seleções por taxa de acerto Panini                      |
 
 ### Clubs
 
-| Método | URL                  | Descrição                                  |
-| ------ | -------------------- | ------------------------------------------ |
-| GET    | `/api/clubs`         | Lista todos os clubes                      |
-| GET    | `/api/clubs/ranking` | Ranking de clubes por jogadores convocados |
+| Acesso | Método | URL                  | Descrição                                  |
+| ------ | ------ | -------------------- | ------------------------------------------ |
+| 🌐     | GET    | `/api/clubs`         | Lista todos os clubes                      |
+| 🌐     | GET    | `/api/clubs/ranking` | Ranking de clubes por jogadores convocados |
 
 ### Docs
 
-| Método | URL              | Descrição                     |
-| ------ | ---------------- | ----------------------------- |
-| GET    | `/api/docs`      | Swagger UI interativo         |
-| GET    | `/api/docs/json` | Especificação OpenAPI em JSON |
+| Acesso | Método | URL              | Descrição                     |
+| ------ | ------ | ---------------- | ----------------------------- |
+| 🌐     | GET    | `/api/docs`      | Swagger UI interativo         |
+| 🌐     | GET    | `/api/docs/json` | Especificação OpenAPI em JSON |
 
 ---
 
@@ -285,6 +315,7 @@ Para cada seleção, os jogadores são divididos em grupos e as métricas calcul
 ## 10. Variáveis de Ambiente (.env)
 
 ```env
+# Banco de dados
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/stickerlabdb"
 
 # Docker Compose
@@ -302,6 +333,12 @@ CLOUDFRONT_URL=https://sua-distribuicao.cloudfront.net
 # Servidor
 PORT=3001
 ALLOWED_ORIGINS=http://localhost:3000,https://seu-dominio.com
+
+# JWT
+JWT_SECRET=seu-jwt-secret-aqui
+JWT_REFRESH_SECRET=seu-jwt-refresh-secret-aqui
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
 ```
 
 > ⚠️ O arquivo `.env` nunca deve ser commitado no Git. Use o `.env.example` como base.
@@ -331,10 +368,7 @@ npx prisma migrate reset
 
 ## 12. Próximos Passos
 
-- Autenticação JWT — proteger endpoints de CRUD (POST, PUT, DELETE)
-- Refresh Token — renovação automática do token de acesso
-- Inserir jogadores — via API (Insomnia) ou script de seed completo
-- Integração front-end — substituir dados mockados pelos endpoints da API
+- Inserir jogadores — via API ou script de seed completo
 - Deploy — AWS Lambda ou ECS + RDS para produção
 
 ---

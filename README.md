@@ -139,18 +139,35 @@ Create a database named `stickerlabdb` in your PostgreSQL instance.
 
 #### 4. Configure environment variables
 
-Create a `.env` file in the `stickerlab-server` directory:
+Copy `.env.example` to `.env` in the `stickerlab-server` directory and fill in your values:
 
 ```env
+# Database
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/stickerlabdb"
-PORT=3001
-NODE_ENV=development
 
-# AWS S3 Configuration (for badge uploads)
-AWS_REGION=us-east-1
-AWS_BUCKET_NAME=your-bucket-name
+# Docker Compose (used by docker-compose.yml)
+POSTGRES_USER=stickerlab
+POSTGRES_PASSWORD=your-password
+POSTGRES_DB=stickerlabdb
+
+# Server
+PORT=3001
+ALLOWED_ORIGINS=http://localhost:3000
+
+# JWT Authentication
+JWT_SECRET=your-jwt-secret
+JWT_REFRESH_SECRET=your-jwt-refresh-secret
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# AWS S3 (for badge uploads)
 AWS_ACCESS_KEY_ID=your-access-key
 AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=your-bucket-name
+
+# CloudFront (CDN for badge URLs)
+CLOUDFRONT_URL=https://your-distribution.cloudfront.net
 ```
 
 #### 5. Run database migrations
@@ -272,37 +289,44 @@ stickerlab-web/
 
 ## 📡 API Endpoints
 
-The backend exposes the following REST API endpoints:
+The backend exposes the following REST API endpoints. Routes marked with 🔒 require a Bearer token (`Authorization: Bearer <accessToken>`).
+
+### Auth
+
+- `POST /api/auth/login` - Login and receive access + refresh tokens
+- `POST /api/auth/refresh` - Exchange a refresh token for new tokens
+- `POST /api/auth/logout` - Invalidate a refresh token
 
 ### Groups
 
-- `GET /api/groups` - Get all groups with teams and statistics
-- `GET /api/groups/:id` - Get a specific group by ID
-- `POST /api/groups` - Create a new group
-- `PUT /api/groups/:id` - Update a group
-- `DELETE /api/groups/:id` - Delete a group
+- `GET /api/groups` - Get all groups with teams
 
 ### Teams
 
 - `GET /api/teams` - Get all teams
-- `GET /api/teams/:id` - Get a specific team with players
-- `POST /api/teams` - Create a new team
-- `PUT /api/teams/:id` - Update a team
-- `DELETE /api/teams/:id` - Delete a team
-- `POST /api/teams/:id/badge` - Upload team badge to S3
+- `GET /api/teams/:id` - Get a specific team with players and statistics
+- `POST /api/teams` 🔒 - Create a new team
+- `PUT /api/teams/:id` 🔒 - Update a team
+- `DELETE /api/teams/:id` 🔒 - Delete a team
+- `POST /api/teams/:id/upload-badge` 🔒 - Upload team badge to S3
 
 ### Players
 
-- `GET /api/players` - Get all players
-- `GET /api/players/:id` - Get a specific player
-- `POST /api/players` - Create a new player
-- `PUT /api/players/:id` - Update a player
-- `DELETE /api/players/:id` - Delete a player
+- `GET /api/players?team_id=<uuid>` - Get players filtered by team
+- `POST /api/players` 🔒 - Create a new player
+- `PUT /api/players/:id` 🔒 - Update a player
+- `DELETE /api/players/:id` 🔒 - Delete a player
+- `PATCH /api/players/:id/club` 🔒 - Assign a club to a player
+
+### Clubs
+
+- `GET /api/clubs` - Get all clubs with total count
+- `GET /api/clubs/ranking` - Get clubs ranked by called-up players with sticker
 
 ### Statistics
 
-- `GET /api/statistics/overall` - Get overall statistics across all teams
-- `GET /api/statistics/ranking` - Get team ranking by Panini accuracy
+- `GET /api/statistics/overall` - Overall statistics across all teams
+- `GET /api/statistics/ranking` - Teams ranked by Panini accuracy rate
 
 Full API documentation available at: **http://localhost:3001/api/docs**
 
