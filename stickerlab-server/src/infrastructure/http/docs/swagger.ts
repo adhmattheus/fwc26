@@ -31,6 +31,15 @@ const options: swaggerJsdoc.Options = {
             refreshToken: { type: "string", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
           },
         },
+        UserProfile: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid", example: "550e8400-e29b-41d4-a716-446655440000" },
+            email: { type: "string", format: "email", example: "admin@stickerlab.com" },
+            name: { type: "string", example: "Admin" },
+            role: { type: "string", example: "admin" },
+          },
+        },
         Group: {
           type: "object",
           properties: {
@@ -204,6 +213,31 @@ const options: swaggerJsdoc.Options = {
             },
             401: {
               description: "Invalid or expired refresh token",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/auth/me": {
+        get: {
+          summary: "Get current user profile",
+          tags: ["Auth"],
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Authenticated user profile",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UserProfile" },
+                },
+              },
+            },
+            401: {
+              description: "Invalid or expired token",
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/Error" },

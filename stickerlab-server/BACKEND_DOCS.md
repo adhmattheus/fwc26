@@ -223,6 +223,7 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 | 🌐     | POST   | `/api/auth/login`    | Autentica usuário e retorna access + refresh token |
 | 🌐     | POST   | `/api/auth/refresh`  | Troca o refresh token por novos tokens            |
 | 🌐     | POST   | `/api/auth/logout`   | Invalida o refresh token                          |
+| 🔒     | GET    | `/api/auth/me`       | Retorna perfil do usuário autenticado             |
 
 ### Groups
 

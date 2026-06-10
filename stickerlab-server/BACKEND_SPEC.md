@@ -13,11 +13,9 @@
 
 ### Planejado (Não Implementado)
 
-- ⏳ **Autenticação**: Login, JWT, Refresh Tokens
-- ⏳ **Entidades Auth**: User, RefreshToken
-- ⏳ **Middleware**: authMiddleware (JWT verification)
-
-> **Nota**: A autenticação está documentada para implementação futura. Atualmente, todos os endpoints CRUD estão públicos.
+- ✅ **Autenticação**: Login, JWT, Refresh Tokens, GET /auth/me
+- ✅ **Entidades Auth**: User, RefreshToken
+- ✅ **Middleware**: authMiddleware (JWT verification)
 
 ---
 
@@ -474,12 +472,12 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
 
 #### Endpoints de Auth
 
-| Método | Endpoint            | Descrição                           |
-| ------ | ------------------- | ----------------------------------- |
-| POST   | `/api/auth/login`   | Login (retorna JWT + refresh token) |
-| POST   | `/api/auth/refresh` | Renova access token                 |
-| POST   | `/api/auth/logout`  | Logout (invalida refresh token)     |
-| GET    | `/api/auth/me`      | Dados do usuário logado             |
+| Método | Endpoint            | Descrição                                     |
+| ------ | ------------------- | --------------------------------------------- |
+| POST   | `/api/auth/login`   | Login (retorna JWT + refresh token)           |
+| POST   | `/api/auth/refresh` | Renova access token                           |
+| POST   | `/api/auth/logout`  | Logout (invalida refresh token)               |
+| GET    | `/api/auth/me`      | Dados do usuário logado (requer Bearer token) |
 
 #### Permissões
 
@@ -921,6 +919,7 @@ async function seed() {
 - `/api/clubs` (GET)
 - `/api/clubs/ranking` (GET)
 - `/api/auth/login|refresh|logout` (POST)
+- `/api/auth/me` (GET — requer Bearer token)
 - `/api/teams/:id/upload-badge` (POST)
 
 ### Upload S3

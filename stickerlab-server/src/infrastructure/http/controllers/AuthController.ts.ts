@@ -1,4 +1,5 @@
 import { IncomingMessage, ServerResponse } from "http";
+import { GetMeUseCase } from "../../../application/use-cases/GetMeUseCase";
 import { LoginUseCase } from "../../../application/use-cases/LoginUseCase";
 import { LogoutUseCase } from "../../../application/use-cases/LogoutUseCase";
 import { RefreshTokenUseCase } from "../../../application/use-cases/RefreshTokenUseCase";
@@ -66,6 +67,20 @@ export class AuthController {
       await useCase.execute(refreshToken);
 
       sendJson(res, 200, { message: "Logout realizado com sucesso" });
+    } catch (error) {
+      if (error instanceof AppError) {
+        sendError(res, error.statusCode, error.message);
+      } else {
+        sendError(res, 500, "Erro interno do servidor");
+      }
+    }
+  }
+
+  async me(req: IncomingMessage & { userId?: string }, res: ServerResponse) {
+    try {
+      const useCase = new GetMeUseCase(userRepository);
+      const result = await useCase.execute(req.userId!);
+      sendJson(res, 200, result);
     } catch (error) {
       if (error instanceof AppError) {
         sendError(res, error.statusCode, error.message);
