@@ -1,5 +1,6 @@
 "use client";
 
+import { loginAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -15,7 +16,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { ASSETS } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const schema = z.object({
@@ -26,15 +30,25 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export function LoginForm() {
+  const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
   });
 
   async function handleSubmit(values: FormValues) {
-    // integração com a API virá aqui
-    console.log(values);
+    const result = await loginAction(values.email, values.password);
+    if (!result.success) {
+      toast.error(result.error);
+      return;
+    }
+    setIsRedirecting(true);
+    router.push("/");
   }
+
+  const isLoading = form.formState.isSubmitting || isRedirecting;
 
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-sm">
@@ -43,6 +57,8 @@ export function LoginForm() {
         alt="StickerLab"
         width={192}
         height={192}
+        style={{ width: 192, height: "auto" }}
+        priority
         unoptimized
       />
       <Card className="w-full">
@@ -92,9 +108,9 @@ export function LoginForm() {
               <Button
                 type="submit"
                 className="w-full mt-2 cursor-pointer"
-                disabled={form.formState.isSubmitting}
+                disabled={isLoading}
               >
-                {form.formState.isSubmitting ? (
+                {isLoading ? (
                   <>
                     <Spinner className="mr-2" />
                     Entrando...

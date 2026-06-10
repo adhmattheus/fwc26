@@ -1,9 +1,25 @@
+import { logoutAction } from "@/actions/auth";
+import { Button } from "@/components/ui/button";
 import { ASSETS, SIZES } from "@/lib/constants";
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 
 export function PageHeader() {
   return (
-    <header className="mb-8 text-center">
+    <header className="mb-8">
+      <div className="flex justify-end mt-2">
+        <form action={logoutAction}>
+          <Button
+            type="submit"
+            variant="ghost"
+            size="sm"
+            className="cursor-pointer"
+          >
+            <LogOut className="size-4" />
+            Sair
+          </Button>
+        </form>
+      </div>
       <div className="flex flex-col items-center gap-4 mb-4">
         <div
           className="relative"
@@ -23,7 +39,7 @@ export function PageHeader() {
         </div>
       </div>
 
-      <p className="text-muted-foreground">
+      <p className="text-muted-foreground text-center">
         Analyze your sticker collection with StickerLab!
       </p>
     </header>

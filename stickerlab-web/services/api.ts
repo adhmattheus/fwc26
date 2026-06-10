@@ -5,10 +5,7 @@ interface RequestOptions {
   tags?: string[];
 }
 
-async function request<T>(
-  endpoint: string,
-  options?: RequestOptions,
-): Promise<T> {
+async function request<T>(endpoint: string, options?: RequestOptions): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     next: {
       revalidate: options?.revalidate ?? 60,
@@ -16,32 +13,11 @@ async function request<T>(
     },
   });
 
-  if (!res.ok) {
-    throw new Error(`API error: ${res.status}`);
-  }
-
-  return res.json();
-}
-
-async function mutation<T>(
-  endpoint: string,
-  method: string,
-  body?: unknown,
-): Promise<T> {
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    method,
-    headers: { "Content-Type": "application/json" },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
-
   if (!res.ok) throw new Error(`API error: ${res.status}`);
-
   return res.json();
 }
 
 export const api = {
   get: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, options),
-  patch: <T>(endpoint: string, body?: unknown) =>
-    mutation<T>(endpoint, "PATCH", body),
 };
