@@ -22,6 +22,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/" },
+  { label: "Album", href: "/album" },
   {
     label: "Ranking",
     children: [

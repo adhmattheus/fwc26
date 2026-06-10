@@ -13,9 +13,10 @@ import { memo } from "react";
 
 interface TeamCardProps {
   team: TeamInGroup;
+  basePath?: string;
 }
 
-function TeamCardComponent({ team }: TeamCardProps) {
+function TeamCardComponent({ team, basePath }: TeamCardProps) {
   const colors = getTeamColors(team);
   const dataExists = hasTeamData(team.comparison);
 
@@ -64,7 +65,7 @@ function TeamCardComponent({ team }: TeamCardProps) {
 
   return (
     <Link
-      href={ROUTES.TEAM(team.id)}
+      href={basePath ? `${basePath}/${team.id}` : ROUTES.TEAM(team.id)}
       aria-label={`View details for ${team.name}`}
     >
       {cardContent}
