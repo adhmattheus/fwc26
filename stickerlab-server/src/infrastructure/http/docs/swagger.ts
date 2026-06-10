@@ -40,6 +40,39 @@ const options: swaggerJsdoc.Options = {
             role: { type: "string", example: "admin" },
           },
         },
+        UserCollection: {
+          type: "object",
+          properties: {
+            albumCodes: {
+              type: "array",
+              items: { type: "string", example: "BRA-1" },
+              description: "Lista de albumCodes das figurinhas que o usuário possui",
+            },
+          },
+        },
+        ToggleStickerRequest: {
+          type: "object",
+          required: ["albumCode"],
+          properties: {
+            albumCode: {
+              type: "string",
+              example: "BRA-1",
+              description: "Código da figurinha no formato XX-N ou XXX-N (ex: BRA-1, FRA-10)",
+              pattern: "^[A-Z]{2,3}-[1-9][0-9]?$",
+            },
+          },
+        },
+        ToggleStickerResponse: {
+          type: "object",
+          properties: {
+            albumCode: { type: "string", example: "BRA-1" },
+            owned: {
+              type: "boolean",
+              example: true,
+              description: "true = figurinha adicionada, false = figurinha removida",
+            },
+          },
+        },
         Group: {
           type: "object",
           properties: {
@@ -238,6 +271,74 @@ const options: swaggerJsdoc.Options = {
             },
             401: {
               description: "Invalid or expired token",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/album/collection": {
+        get: {
+          summary: "Get user sticker collection",
+          description: "Retorna todos os albumCodes das figurinhas que o usuário autenticado possui.",
+          tags: ["Album"],
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista de albumCodes do usuário",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UserCollection" },
+                },
+              },
+            },
+            401: {
+              description: "Token inválido ou expirado",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/album/collection/toggle": {
+        post: {
+          summary: "Toggle sticker ownership",
+          description: "Adiciona a figurinha se o usuário não a possui; remove se já possui. O `userId` é extraído do JWT — nunca do body.",
+          tags: ["Album"],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ToggleStickerRequest" },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Estado atualizado da figurinha",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ToggleStickerResponse" },
+                },
+              },
+            },
+            400: {
+              description: "albumCode com formato inválido",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+            401: {
+              description: "Token inválido ou expirado",
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/Error" },

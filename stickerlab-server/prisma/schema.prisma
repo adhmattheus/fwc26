@@ -71,6 +71,7 @@ model User {
   name          String
   role          String         @default("admin")
   refreshTokens RefreshToken[]
+  userStickers  UserSticker[]
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
 
@@ -86,4 +87,15 @@ model RefreshToken {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("refresh_tokens")
+}
+
+model UserSticker {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  albumCode String   @map("album_code")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, albumCode])
+  @@map("user_stickers")
 }

@@ -16,6 +16,8 @@
 - ✅ **Autenticação**: Login, JWT, Refresh Tokens, GET /auth/me
 - ✅ **Entidades Auth**: User, RefreshToken
 - ✅ **Middleware**: authMiddleware (JWT verification)
+- ✅ **Album/Coleção**: GET /album/collection, POST /album/collection/toggle
+- ✅ **Entidade**: UserSticker (userId, albumCode, unique index)
 
 ---
 
@@ -381,6 +383,47 @@ Team (1) ───┴──< (26) Player ──> (1) Club (opcional)
   }
 ]
 ```
+
+---
+
+### **Album (Coleção do Usuário)**
+
+| Método | Endpoint                         | Auth | Descrição                                          |
+| ------ | -------------------------------- | ---- | -------------------------------------------------- |
+| GET    | `/api/album/collection`          | ✅   | Retorna lista de albumCodes que o usuário possui   |
+| POST   | `/api/album/collection/toggle`   | ✅   | Adiciona ou remove uma figurinha (toggle)          |
+
+**Response `GET /api/album/collection`:**
+
+```json
+{
+  "albumCodes": ["BRA-1", "BRA-2", "ARG-5"]
+}
+```
+
+**Request `POST /api/album/collection/toggle`:**
+
+```json
+{
+  "albumCode": "BRA-1"
+}
+```
+
+**Response `POST /api/album/collection/toggle`:**
+
+```json
+{
+  "albumCode": "BRA-1",
+  "owned": true
+}
+```
+
+**Regras:**
+- `userId` é extraído do JWT — nunca do body
+- `albumCode` validado com regex `^[A-Z]{2,3}-[1-9][0-9]?$` (ex: `BRA-1`, `FRA-10`)
+- `owned: true` → figurinha adicionada à coleção
+- `owned: false` → figurinha removida da coleção
+- Índice único em `(userId, albumCode)` garante sem duplicatas
 
 ---
 
@@ -906,6 +949,7 @@ async function seed() {
 3. ✅ **Player** (~1000 registros)
 4. ✅ **User** (admin)
 5. ✅ **RefreshToken** (auth)
+6. ✅ **UserSticker** (coleção pessoal — unique index em userId + albumCode)
 
 ### Endpoints Principais
 
@@ -920,6 +964,8 @@ async function seed() {
 - `/api/clubs/ranking` (GET)
 - `/api/auth/login|refresh|logout` (POST)
 - `/api/auth/me` (GET — requer Bearer token)
+- `/api/album/collection` (GET — requer Bearer token)
+- `/api/album/collection/toggle` (POST — requer Bearer token)
 - `/api/teams/:id/upload-badge` (POST)
 
 ### Upload S3

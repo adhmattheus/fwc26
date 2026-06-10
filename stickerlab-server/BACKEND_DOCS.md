@@ -225,6 +225,13 @@ O front-end usa essa URL diretamente em tags `<img>` sem precisar saber nada sob
 | 🌐     | POST   | `/api/auth/logout`   | Invalida o refresh token                          |
 | 🔒     | GET    | `/api/auth/me`       | Retorna perfil do usuário autenticado             |
 
+### Album
+
+| Acesso | Método | URL                              | Descrição                                        |
+| ------ | ------ | -------------------------------- | ------------------------------------------------ |
+| 🔒     | GET    | `/api/album/collection`          | Retorna os albumCodes das figurinhas do usuário  |
+| 🔒     | POST   | `/api/album/collection/toggle`   | Adiciona ou remove uma figurinha da coleção      |
+
 ### Groups
 
 | Acesso | Método | URL           | Descrição                       |
