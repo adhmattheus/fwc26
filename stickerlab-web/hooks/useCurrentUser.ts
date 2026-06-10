@@ -1,26 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
+import type { UserProfile } from "@/services/auth.service";
+import { useQuery } from "@tanstack/react-query";
 
-export interface CurrentUser {
-  sub: string;
-  email: string;
-}
+export type { UserProfile };
 
-export function useCurrentUser(): CurrentUser | null {
-  return useMemo(() => {
-    if (typeof document === "undefined") return null;
-
-    const match = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("user="));
-
-    if (!match) return null;
-
-    try {
-      return JSON.parse(decodeURIComponent(match.split("=")[1]));
-    } catch {
-      return null;
-    }
-  }, []);
+export function useCurrentUser() {
+  return useQuery<UserProfile>({
+    queryKey: ["current-user"],
+    queryFn: async () => {
+      const res = await fetch("/api/me");
+      if (!res.ok) throw new Error("Failed to fetch user");
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
 }

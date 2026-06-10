@@ -8,7 +8,7 @@ interface RequestOptions {
 async function request<T>(endpoint: string, options?: RequestOptions): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     next: {
-      revalidate: options?.revalidate ?? 60,
+      revalidate: options?.revalidate ?? 0,
       tags: options?.tags,
     },
   });

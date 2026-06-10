@@ -41,6 +41,31 @@ async function refreshTokens(): Promise<string | null> {
   }
 }
 
+async function get<T>(endpoint: string): Promise<T> {
+  const token = await getAccessToken();
+
+  const res = await fetch(`${BASE_URL}${endpoint}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    next: { revalidate: 0 },
+  });
+
+  if (res.status === 401) {
+    const newToken = await refreshTokens();
+    if (!newToken) redirect("/login");
+
+    const retried = await fetch(`${BASE_URL}${endpoint}`, {
+      headers: { Authorization: `Bearer ${newToken}` },
+      next: { revalidate: 0 },
+    });
+
+    if (!retried.ok) throw new Error(`API error: ${retried.status}`);
+    return retried.json();
+  }
+
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+}
+
 async function mutation<T>(endpoint: string, method: string, body?: unknown): Promise<T> {
   const token = await getAccessToken();
 
@@ -102,6 +127,7 @@ async function upload<T>(endpoint: string, form: FormData): Promise<T> {
 }
 
 export const apiServer = {
+  get: <T>(endpoint: string) => get<T>(endpoint),
   post: <T>(endpoint: string, body?: unknown) => mutation<T>(endpoint, "POST", body),
   put: <T>(endpoint: string, body?: unknown) => mutation<T>(endpoint, "PUT", body),
   patch: <T>(endpoint: string, body?: unknown) => mutation<T>(endpoint, "PATCH", body),

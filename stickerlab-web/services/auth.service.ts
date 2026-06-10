@@ -10,6 +10,13 @@ export interface AuthUser {
   email: string;
 }
 
+export interface UserProfile {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
 async function login(email: string, password: string): Promise<AuthTokens> {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",

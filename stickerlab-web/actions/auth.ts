@@ -1,6 +1,7 @@
 "use server";
 
-import { authService, type AuthUser } from "@/services/auth.service";
+import { apiServer } from "@/services/api.server";
+import { authService, type AuthUser, type UserProfile } from "@/services/auth.service";
 import { decodeJwt } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -52,6 +53,10 @@ export async function loginAction(
   } catch {
     return { success: false, error: "E-mail ou senha inválidos." };
   }
+}
+
+export async function getCurrentUserAction(): Promise<UserProfile> {
+  return apiServer.get<UserProfile>("/auth/me");
 }
 
 export async function logoutAction() {

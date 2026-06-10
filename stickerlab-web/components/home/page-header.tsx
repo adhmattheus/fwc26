@@ -1,4 +1,5 @@
 import { logoutAction } from "@/actions/auth";
+import { UserGreeting } from "@/components/home/user-greeting";
 import { Button } from "@/components/ui/button";
 import { ASSETS, SIZES } from "@/lib/constants";
 import { LogOut } from "lucide-react";
@@ -7,7 +8,8 @@ import Image from "next/image";
 export function PageHeader() {
   return (
     <header className="mb-8">
-      <div className="flex justify-end mt-2">
+      <div className="flex items-center justify-between mt-2">
+        <UserGreeting />
         <form action={logoutAction}>
           <Button
             type="submit"
