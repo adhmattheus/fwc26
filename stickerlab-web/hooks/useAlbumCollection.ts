@@ -1,6 +1,6 @@
 "use client";
 
-import { getCollectionAction, toggleStickerAction } from "@/actions/album";
+import { bulkAddStickersAction, getCollectionAction, toggleStickerAction } from "@/actions/album";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const QUERY_KEY = ["album-collection"];
@@ -36,6 +36,34 @@ export function useToggleSticker() {
       return { previous };
     },
     onError: (_err, _albumCode, context) => {
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(QUERY_KEY, context.previous);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+    },
+  });
+}
+
+export function useBulkAddStickers() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (albumCodes: string[]) => bulkAddStickersAction(albumCodes),
+    onMutate: async (albumCodes) => {
+      await queryClient.cancelQueries({ queryKey: QUERY_KEY });
+
+      const previous = queryClient.getQueryData<string[]>(QUERY_KEY);
+
+      queryClient.setQueryData<string[]>(QUERY_KEY, (old = []) => [
+        ...old,
+        ...albumCodes.filter((c) => !old.includes(c)),
+      ]);
+
+      return { previous };
+    },
+    onError: (_err, _albumCodes, context) => {
       if (context?.previous !== undefined) {
         queryClient.setQueryData(QUERY_KEY, context.previous);
       }
