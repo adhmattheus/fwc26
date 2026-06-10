@@ -23,12 +23,12 @@ function TeamCardComponent({ team, basePath }: TeamCardProps) {
   const cardContent = (
     <Card
       className={cn(
-        "p-0 gap-0 h-full overflow-hidden transition-all duration-200 group",
+        "p-0 gap-0  overflow-hidden transition-all duration-200 group",
         "hover:shadow-lg hover:-translate-y-0.5 cursor-pointer",
       )}
     >
       <div
-        className={`${SIZES.BANNER.SMALL} w-full relative flex items-center justify-center`}
+        className={`${SIZES.BANNER.SMALL} w-full relative flex items-center justify-center min-h-16`}
         style={{
           background: getTeamGradient(colors.primary, colors.secondary),
         }}

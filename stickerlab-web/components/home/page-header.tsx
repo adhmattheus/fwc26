@@ -16,7 +16,7 @@ export function PageHeader() {
             src={ASSETS.STICKERLAB_URL}
             alt="StickerLab"
             fill
-            className="object-contain"
+            className="object-contain w-auto h-auto"
             priority
             unoptimized
           />

@@ -79,8 +79,9 @@ const TeamAccordionItem = memo(function TeamAccordionItem({
 
   return (
     <AccordionItem
+      id={`team-${team.id}`}
       value={team.id}
-      className="border rounded-lg bg-white overflow-hidden last:border-b"
+      className="border rounded-lg bg-white overflow-hidden last:border-b scroll-mt-20"
     >
       <AccordionTrigger className="hover:no-underline p-4 rounded-lg cursor-pointer transition-colors hover:bg-muted/60 group">
         <div className="flex items-center gap-3">
@@ -144,7 +145,7 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
 
   return (
     <div className="flex flex-col gap-4 mb-8">
-      <Card className="gap-0 py-0">
+      <Card id="fwc" className="gap-0 py-0 scroll-mt-20">
         <CardHeader className="p-4 gap-0">
           <h2 className="text-sm font-bold text-foreground">FWC</h2>
         </CardHeader>
@@ -189,7 +190,7 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
         </CardContent>
       </Card>
 
-      <Card className="gap-0 py-0">
+      <Card id="cc" className="gap-0 py-0 scroll-mt-20">
         <CardHeader className="p-4 gap-0">
           <h2 className="text-sm font-bold text-foreground">Coca-Cola</h2>
         </CardHeader>
@@ -235,7 +236,7 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
       </Card>
 
       {sorted.map((group) => (
-        <Card key={group.id} className="gap-0 py-0">
+        <Card key={group.id} id={`group-${group.name}`} className="gap-0 py-0 scroll-mt-20">
           <CardHeader className="p-4 gap-0">
             <h2 className="text-sm font-bold text-foreground">
               Group {group.name}
