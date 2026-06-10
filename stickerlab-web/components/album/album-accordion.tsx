@@ -23,6 +23,10 @@ const FWC_STICKERS = Array.from({ length: 20 }, (_, i) => ({
   code: `FWC-${String(i).padStart(2, "0")}`,
 }));
 
+const CC_STICKERS = Array.from({ length: 14 }, (_, i) => ({
+  code: `CC-${i + 1}`,
+}));
+
 interface StickerCardProps {
   code: string;
   owned: boolean;
@@ -133,6 +137,11 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
     [collection],
   );
 
+  const ccMissing = useMemo(
+    () => CC_STICKERS.filter((s) => !collection.includes(s.code)),
+    [collection],
+  );
+
   return (
     <div className="flex flex-col gap-4 mb-8">
       <Card className="gap-0 py-0">
@@ -166,6 +175,51 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
                 )}
                 <div className="grid grid-cols-4 gap-6 p-4 lg:grid-cols-5">
                   {FWC_STICKERS.map((sticker) => (
+                    <StickerCard
+                      key={sticker.code}
+                      code={sticker.code}
+                      owned={collection.includes(sticker.code)}
+                      onToggle={() => toggle(sticker.code)}
+                    />
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </CardContent>
+      </Card>
+
+      <Card className="gap-0 py-0">
+        <CardHeader className="p-4 gap-0">
+          <h2 className="text-sm font-bold text-foreground">Coca-Cola</h2>
+        </CardHeader>
+        <CardContent className="p-3">
+          <Accordion type="multiple" className="w-full">
+            <AccordionItem
+              value="cc"
+              className="border rounded-lg bg-white overflow-hidden last:border-b"
+            >
+              <AccordionTrigger className="hover:no-underline p-4 rounded-lg cursor-pointer transition-colors hover:bg-muted/60 group">
+                <span className="font-medium text-foreground group-hover:text-primary transition-colors">
+                  Coca-Cola Stickers
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                {ccMissing.length > 0 && (
+                  <div className="flex justify-end px-4 pt-3">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 gap-1 text-xs cursor-pointer"
+                      onClick={() => bulkAdd(ccMissing.map((s) => s.code))}
+                    >
+                      <CheckCheck className="h-3 w-3" />
+                      Complete all
+                    </Button>
+                  </div>
+                )}
+                <div className="grid grid-cols-4 gap-6 p-4 lg:grid-cols-5">
+                  {CC_STICKERS.map((sticker) => (
                     <StickerCard
                       key={sticker.code}
                       code={sticker.code}

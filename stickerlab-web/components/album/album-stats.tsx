@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAlbumCollection } from "@/hooks/useAlbumCollection";
 
-const ALBUM_TOTAL = 980;
+const ALBUM_TOTAL = 994;
 
 export function AlbumStats() {
   const { data: collection = [] } = useAlbumCollection();
