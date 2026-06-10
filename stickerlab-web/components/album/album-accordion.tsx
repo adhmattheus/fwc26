@@ -15,9 +15,9 @@ import {
   useToggleSticker,
 } from "@/hooks/useAlbumCollection";
 import { cn } from "@/lib/utils";
-import type { GroupResponse } from "@/services/groups.service";
+import type { GroupResponse, TeamInGroup } from "@/services/groups.service";
 import { CheckCheck } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { memo, useMemo } from "react";
 
 const FWC_STICKERS = Array.from({ length: 20 }, (_, i) => ({
   code: `FWC-${String(i).padStart(2, "0")}`,
@@ -29,7 +29,7 @@ interface StickerCardProps {
   onToggle: () => void;
 }
 
-function StickerCard({ code, owned, onToggle }: StickerCardProps) {
+const StickerCard = memo(function StickerCard({ code, owned, onToggle }: StickerCardProps) {
   return (
     <div
       onClick={onToggle}
@@ -48,39 +48,90 @@ function StickerCard({ code, owned, onToggle }: StickerCardProps) {
       </span>
     </div>
   );
+});
+
+interface TeamAccordionItemProps {
+  team: TeamInGroup;
+  collection: string[];
+  onToggle: (code: string) => void;
+  onBulkAdd: (codes: string[]) => void;
 }
+
+const TeamAccordionItem = memo(function TeamAccordionItem({
+  team,
+  collection,
+  onToggle,
+  onBulkAdd,
+}: TeamAccordionItemProps) {
+  const stickers = useMemo(
+    () => Array.from({ length: 20 }, (_, i) => ({ code: `${team.fifaCode}-${i + 1}` })),
+    [team.fifaCode],
+  );
+
+  const missingCodes = useMemo(
+    () => stickers.filter((s) => !collection.includes(s.code)).map((s) => s.code),
+    [stickers, collection],
+  );
+
+  return (
+    <AccordionItem
+      value={team.id}
+      className="border rounded-lg bg-white overflow-hidden last:border-b"
+    >
+      <AccordionTrigger className="hover:no-underline p-4 rounded-lg cursor-pointer transition-colors hover:bg-muted/60 group">
+        <div className="flex items-center gap-3">
+          <TeamBadge team={team} size="small" />
+          <span className="font-medium text-foreground group-hover:text-primary transition-colors">
+            {team.name}
+          </span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent>
+        {missingCodes.length > 0 && (
+          <div className="flex justify-end px-4 pt-3">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 gap-1 text-xs cursor-pointer"
+              onClick={() => onBulkAdd(missingCodes)}
+            >
+              <CheckCheck className="h-3 w-3" />
+              Complete all
+            </Button>
+          </div>
+        )}
+        <div className="grid grid-cols-4 gap-6 p-4 lg:grid-cols-5">
+          {stickers.map((sticker) => (
+            <StickerCard
+              key={sticker.code}
+              code={sticker.code}
+              owned={collection.includes(sticker.code)}
+              onToggle={() => onToggle(sticker.code)}
+            />
+          ))}
+        </div>
+      </AccordionContent>
+    </AccordionItem>
+  );
+});
 
 interface AlbumAccordionProps {
   groups: GroupResponse[];
 }
 
 export function AlbumAccordion({ groups }: AlbumAccordionProps) {
-  const sorted = [...groups].sort((a, b) => a.displayOrder - b.displayOrder);
+  const sorted = useMemo(
+    () => [...groups].sort((a, b) => a.displayOrder - b.displayOrder),
+    [groups],
+  );
   const { data: collection = [] } = useAlbumCollection();
   const { mutate: toggle } = useToggleSticker();
   const { mutate: bulkAdd } = useBulkAddStickers();
-  const [expanded, setExpanded] = useState<string[]>([]);
-  const initialized = useRef(false);
 
-  useEffect(() => {
-    if (initialized.current || collection.length === 0) return;
-    initialized.current = true;
-
-    const withStickers = sorted
-      .flatMap((g) => g.teams)
-      .filter((team) =>
-        collection.some((code) => code.startsWith(`${team.fifaCode}-`)),
-      )
-      .map((team) => team.id);
-
-    if (collection.some((code) => code.startsWith("FWC-"))) {
-      withStickers.push("fwc");
-    }
-
-    setExpanded(withStickers);
-  }, [collection, sorted]);
-
-  const fwcMissing = FWC_STICKERS.filter((s) => !collection.includes(s.code));
+  const fwcMissing = useMemo(
+    () => FWC_STICKERS.filter((s) => !collection.includes(s.code)),
+    [collection],
+  );
 
   return (
     <div className="flex flex-col gap-4 mb-8">
@@ -89,12 +140,7 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
           <h2 className="text-sm font-bold text-foreground">FWC</h2>
         </CardHeader>
         <CardContent className="p-3">
-          <Accordion
-            type="multiple"
-            className="w-full"
-            value={expanded}
-            onValueChange={setExpanded}
-          >
+          <Accordion type="multiple" className="w-full">
             <AccordionItem
               value="fwc"
               className="border rounded-lg bg-white overflow-hidden last:border-b"
@@ -142,62 +188,16 @@ export function AlbumAccordion({ groups }: AlbumAccordionProps) {
             </h2>
           </CardHeader>
           <CardContent className="p-3">
-            <Accordion
-              type="multiple"
-              className="w-full flex flex-col gap-4"
-              value={expanded}
-              onValueChange={setExpanded}
-            >
-              {group.teams.map((team) => {
-                const stickers = Array.from({ length: 20 }, (_, i) => ({
-                  code: `${team.fifaCode}-${i + 1}`,
-                }));
-                const missingCodes = stickers
-                  .filter((s) => !collection.includes(s.code))
-                  .map((s) => s.code);
-
-                return (
-                  <AccordionItem
-                    key={team.id}
-                    value={team.id}
-                    className="border rounded-lg bg-white overflow-hidden last:border-b"
-                  >
-                    <AccordionTrigger className="hover:no-underline p-4 rounded-lg cursor-pointer transition-colors hover:bg-muted/60 group">
-                      <div className="flex items-center gap-3">
-                        <TeamBadge team={team} size="small" />
-                        <span className="font-medium text-foreground group-hover:text-primary transition-colors">
-                          {team.name}
-                        </span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {missingCodes.length > 0 && (
-                        <div className="flex justify-end px-4 pt-3">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-7 gap-1 text-xs cursor-pointer"
-                            onClick={() => bulkAdd(missingCodes)}
-                          >
-                            <CheckCheck className="h-3 w-3" />
-                            Complete all
-                          </Button>
-                        </div>
-                      )}
-                      <div className="grid grid-cols-4 gap-6 p-4 lg:grid-cols-5">
-                        {stickers.map((sticker) => (
-                          <StickerCard
-                            key={sticker.code}
-                            code={sticker.code}
-                            owned={collection.includes(sticker.code)}
-                            onToggle={() => toggle(sticker.code)}
-                          />
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
+            <Accordion type="multiple" className="w-full flex flex-col gap-4">
+              {group.teams.map((team) => (
+                <TeamAccordionItem
+                  key={team.id}
+                  team={team}
+                  collection={collection}
+                  onToggle={toggle}
+                  onBulkAdd={bulkAdd}
+                />
+              ))}
             </Accordion>
           </CardContent>
         </Card>
