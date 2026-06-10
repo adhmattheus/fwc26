@@ -1,84 +1,80 @@
-"use client"
+"use client";
 
-"use client"
-
-import { logoutAction } from "@/actions/auth"
-import { useCurrentUser } from "@/hooks/useCurrentUser"
-import { useEffect, useRef, useState } from "react"
-import { ChevronDown, LogOut, Menu, X } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { logoutAction } from "@/actions/auth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { cn } from "@/lib/utils";
+import { ChevronDown, LogOut, Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 type SubItem = {
-  label: string
-  description?: string
-  href: string
-}
+  label: string;
+  description?: string;
+  href: string;
+};
 
 type NavItem = {
-  label: string
-  href?: string
-  children?: SubItem[]
-}
+  label: string;
+  href?: string;
+  children?: SubItem[];
+};
 
 const NAV_ITEMS: NavItem[] = [
+  { label: "Home", href: "/" },
   {
-    label: "Plataforma",
+    label: "Ranking",
     children: [
-      { label: "Visão geral", description: "Conheça o ecossistema completo", href: "#" },
-      { label: "Automação", description: "Fluxos inteligentes em tempo real", href: "#" },
-      { label: "Integrações", description: "Conecte suas ferramentas favoritas", href: "#" },
-      { label: "Segurança", description: "Criptografia de ponta a ponta", href: "#" },
+      {
+        label: "StickerLab Accuracy",
+        description: "Sticker accuracy ranking",
+        href: "/ranking/accuracy",
+      },
+      {
+        label: "Clubs Representation",
+        description: "Clubs representation in the album",
+        href: "/ranking/clubs",
+      },
     ],
   },
-  {
-    label: "Soluções",
-    children: [
-      { label: "Para Startups", description: "Escale com agilidade", href: "#" },
-      { label: "Para Empresas", description: "Infraestrutura corporativa", href: "#" },
-      { label: "Para Devs", description: "APIs e SDKs flexíveis", href: "#" },
-    ],
-  },
-  {
-    label: "Recursos",
-    children: [
-      { label: "Documentação", description: "Guias e referências técnicas", href: "#" },
-      { label: "Blog", description: "Novidades e tendências", href: "#" },
-      { label: "Comunidade", description: "Conecte-se com outros usuários", href: "#" },
-    ],
-  },
-  { label: "Preços", href: "#" },
-]
+];
+
+function isActive(pathname: string, item: NavItem): boolean {
+  if (item.href) return pathname === item.href;
+  return item.children?.some((sub) => pathname.startsWith(sub.href)) ?? false;
+}
 
 export function Header() {
-  const { data: user } = useCurrentUser()
-  const [scrolled, setScrolled] = useState(false)
-  const [openMenu, setOpenMenu] = useState<string | null>(null)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [mobileSub, setMobileSub] = useState<string | null>(null)
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { data: user } = useCurrentUser();
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSub, setMobileSub] = useState<string | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : ""
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [mobileOpen])
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   const handleEnter = (label: string) => {
-    if (closeTimer.current) clearTimeout(closeTimer.current)
-    setOpenMenu(label)
-  }
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpenMenu(label);
+  };
 
   const handleLeave = () => {
-    closeTimer.current = setTimeout(() => setOpenMenu(null), 120)
-  }
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 120);
+  };
 
   return (
     <header
@@ -113,8 +109,8 @@ export function Header() {
                 <button
                   type="button"
                   className={cn(
-                    "flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                    openMenu === item.label
+                    "relative flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+                    openMenu === item.label || isActive(pathname, item)
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground",
                   )}
@@ -128,14 +124,23 @@ export function Header() {
                       openMenu === item.label && "rotate-180",
                     )}
                   />
+                  {isActive(pathname, item) && (
+                    <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-primary" />
+                  )}
                 </button>
               ) : (
-                <a
-                  href={item.href}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                <Link
+                  href={item.href!}
+                  className={cn(
+                    "relative rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-foreground",
+                    isActive(pathname, item) ? "text-foreground" : "text-muted-foreground",
+                  )}
                 >
                   {item.label}
-                </a>
+                  {isActive(pathname, item) && (
+                    <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-primary" />
+                  )}
+                </Link>
               )}
 
               {item.children && (
@@ -150,7 +155,7 @@ export function Header() {
                   <div className="w-72 overflow-hidden rounded-xl border border-border/70 bg-popover/95 p-2 shadow-2xl backdrop-blur-xl">
                     <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
                     {item.children.map((sub) => (
-                      <a
+                      <Link
                         key={sub.label}
                         href={sub.href}
                         className="group/sub flex flex-col gap-0.5 rounded-lg px-3 py-2.5 transition-colors hover:bg-accent"
@@ -164,7 +169,7 @@ export function Header() {
                             {sub.description}
                           </span>
                         )}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -204,13 +209,18 @@ export function Header() {
       >
         <nav className="flex max-h-[calc(100vh-4rem)] flex-col gap-1 overflow-y-auto px-4 py-4">
           {NAV_ITEMS.map((item) => (
-            <div key={item.label} className="border-b border-border/40 last:border-0">
+            <div
+              key={item.label}
+              className="border-b border-border/40 last:border-0"
+            >
               {item.children ? (
                 <>
                   <button
                     type="button"
                     onClick={() =>
-                      setMobileSub((cur) => (cur === item.label ? null : item.label))
+                      setMobileSub((cur) =>
+                        cur === item.label ? null : item.label,
+                      )
                     }
                     className="flex w-full items-center justify-between py-3 text-sm font-medium text-foreground"
                     aria-expanded={mobileSub === item.label}
@@ -231,29 +241,31 @@ export function Header() {
                   >
                     <div className="flex flex-col gap-0.5 pb-2 pl-3">
                       {item.children.map((sub) => (
-                        <a
+                        <Link
                           key={sub.label}
                           href={sub.href}
                           className="flex flex-col gap-0.5 rounded-lg border-l border-border/60 px-3 py-2 transition-colors hover:bg-accent"
                         >
-                          <span className="text-sm text-foreground">{sub.label}</span>
+                          <span className="text-sm text-foreground">
+                            {sub.label}
+                          </span>
                           {sub.description && (
                             <span className="text-xs text-muted-foreground">
                               {sub.description}
                             </span>
                           )}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
                 </>
               ) : (
-                <a
-                  href={item.href}
+                <Link
+                  href={item.href!}
                   className="block py-3 text-sm font-medium text-foreground"
                 >
                   {item.label}
-                </a>
+                </Link>
               )}
             </div>
           ))}
@@ -272,5 +284,5 @@ export function Header() {
         </nav>
       </div>
     </header>
-  )
+  );
 }
